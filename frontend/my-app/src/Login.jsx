@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { authAPI } from "./services/api";
 import styles from "./AuthLayoutStyles";
+import "./Auth.css";
 
-function Login() {
+function Login({ onSuccess }) {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -13,11 +15,10 @@ function Login() {
   const [type, setType] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("patient");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
     if (!email || !password) {
       setMessage("All fields are required");
@@ -31,22 +32,49 @@ function Login() {
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      setMessage("Password must be strong");
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await authAPI.login({ email, password, role });
+      
+      if (response.data.success) {
+        // Store token and user info
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("isLoggedIn", "true");
+        
+        setMessage(response.data.message);
+        setType("success");
+
+        setTimeout(() => {
+          if (onSuccess) {
+            onSuccess();
+          }
+          // Redirect based on role
+          if (response.data.user.role === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            navigate("/dashboard");
+          }
+        }, 800);
+      }
+    } catch (error) {
+      setLoading(false);
+      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      setMessage(errorMessage);
       setType("error");
-      return;
     }
-
-    setMessage(`${role.toUpperCase()} login successful`);
-    setType("success");
-
-    setTimeout(() => {
-      navigate(`/${role}/dashboard`);
-    }, 800);
   };
 
   return (
     <div style={styles.page}>
+      {/* Navigation */}
+      <div style={styles.navBar}>
+        <Link to="/" style={styles.navLink} className="auth-nav-link">← Back to Home</Link>
+        <Link to="/register" style={styles.navLink} className="auth-nav-link">Don't have an account? Register</Link>
+      </div>
+
       <motion.div
         style={styles.card}
         initial={{ opacity: 0, y: 40 }}
@@ -115,12 +143,17 @@ function Login() {
           </div>
 
           <motion.button
-            style={styles.button}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            style={{
+              ...styles.button,
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? "not-allowed" : "pointer"
+            }}
+            whileHover={loading ? {} : { scale: 1.05 }}
+            whileTap={loading ? {} : { scale: 0.95 }}
             onClick={handleLogin}
+            disabled={loading}
           >
-            LOGIN
+            {loading ? "LOGGING IN..." : "LOGIN"}
           </motion.button>
         </div>
 

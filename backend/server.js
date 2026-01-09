@@ -9,6 +9,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware (to see all API requests in console)
+app.use((req, res, next) => {
+  console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/curelink', {
   useNewUrlParser: true,
@@ -18,7 +24,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/curelink'
 .catch(err => console.log('MongoDB Connection Error:', err));
 
 // Routes
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Basic route
 app.get('/', (req, res) => {

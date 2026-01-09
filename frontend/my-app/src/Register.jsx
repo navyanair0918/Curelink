@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import { authAPI } from "./services/api";
 import styles from "./AuthLayoutStyles";
+import "./Auth.css";
 
-function Register() {
+function Register({ onSuccess }) {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,16 +15,23 @@ function Register() {
   const [message, setMessage] = useState("");
   const [type, setType] = useState(""); 
   const [showPassword, setShowPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState("patient");
 
-
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
     if (!name.trim()) {
       setMessage("Name is required");
+      setType("error");
+      return;
+    }
+
+    if (!role || (role !== "patient" && role !== "doctor")) {
+      setMessage("Please select a role (Patient or Doctor)");
       setType("error");
       return;
     }
@@ -32,7 +43,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     }
 
     if (!passwordRegex.test(password)) {
-      setMessage("Password must be strong");
+      setMessage("Password must be at least 8 characters and contain uppercase, lowercase, number, and special character");
       setType("error");
       return;
     }
@@ -43,12 +54,44 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       return;
     }
 
-    setMessage("Account created successfully ");
-    setType("success");
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await authAPI.register({ name, email, password, role });
+      
+      if (response.data.success) {
+        // Store token and user info
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("isLoggedIn", "true");
+        
+        setMessage(response.data.message);
+        setType("success");
+
+        setTimeout(() => {
+          if (onSuccess) {
+            onSuccess();
+          }
+          navigate("/dashboard");
+        }, 800);
+      }
+    } catch (error) {
+      setLoading(false);
+      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      setMessage(errorMessage);
+      setType("error");
+    }
   };
 
   return (
     <div style={styles.page}>
+      {/* Navigation */}
+      <div style={styles.navBar}>
+        <Link to="/" style={styles.navLink} className="auth-nav-link">← Back to Home</Link>
+        <Link to="/login" style={styles.navLink} className="auth-nav-link">Already have an account? Login</Link>
+      </div>
+
       <motion.div
         style={styles.card}
         initial={{ opacity: 0, y: 40 }}
@@ -59,6 +102,26 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
         {/* LEFT */}
         <div style={styles.left}>
           <h2 style={styles.title}>Create Account</h2>
+
+          {/* ROLE SELECTION */}
+          <div style={styles.roleToggle}>
+            <p style={{ marginBottom: "10px", fontSize: "14px", color: "#64748b", fontWeight: 500 }}>
+              Register as:
+            </p>
+            {["patient", "doctor"].map((r) => (
+              <button
+                key={r}
+                onClick={() => setRole(r)}
+                style={{
+                  ...styles.roleButton,
+                  background: role === r ? "#4f46e5" : "transparent",
+                  color: role === r ? "#fff" : "#334155"
+                }}
+              >
+                {r.charAt(0).toUpperCase() + r.slice(1)}
+              </button>
+            ))}
+          </div>
 
           {/* MESSAGE */}
           <AnimatePresence>
@@ -125,12 +188,17 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
           <motion.button
-            style={styles.button}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            style={{
+              ...styles.button,
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? "not-allowed" : "pointer"
+            }}
+            whileHover={loading ? {} : { scale: 1.05 }}
+            whileTap={loading ? {} : { scale: 0.95 }}
             onClick={handleRegister}
+            disabled={loading}
           >
-            REGISTER
+            {loading ? "REGISTERING..." : "REGISTER"}
           </motion.button>
         </div>
 
@@ -141,10 +209,23 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <h3>Why Register?</h3>
-          <p>✔ Easy appointment booking</p>
-          <p>✔ Digital health records</p>
-          <p>✔ Trusted platform</p>
+          {role === "patient" ? (
+            <>
+              <h3>Register as Patient</h3>
+              <p>✔ Easy appointment booking</p>
+              <p>✔ Digital health records</p>
+              <p>✔ Access to qualified doctors</p>
+              <p>✔ Secure platform</p>
+            </>
+          ) : (
+            <>
+              <h3>Register as Doctor</h3>
+              <p>✔ Manage your appointments</p>
+              <p>✔ Connect with patients</p>
+              <p>✔ Digital patient records</p>
+              <p>✔ Professional platform</p>
+            </>
+          )}
         </motion.div>
       </motion.div>
     </div>

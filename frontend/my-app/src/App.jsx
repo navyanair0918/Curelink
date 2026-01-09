@@ -1,117 +1,250 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+
+import LandingPage from "./pages/LandingPage";
 import Login from "./Login";
 import Register from "./Register";
+import BookAppointment from "./components/BookAppointment";
+import MyAppointments from "./components/MyAppointments";
 import DashboardPage from "./pages/DashboardPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import "./App.css";
 
-function App() {
-  const [activeTab, setActiveTab] = useState("login");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Function to handle login/register success
-  const handleAuthSuccess = () => {
-    setIsLoggedIn(true);
-  };
-
-  if (isLoggedIn) {
-    // Show dashboard after login/register
-    return <DashboardPage />;
+// Protected Route Component
+function ProtectedRoute({ children, isAuthenticated }) {
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
-
-  return (
-    <div>
-      {/* Toggle */}
-      <div style={styles.toggleWrapper}>
-        <div style={styles.toggle}>
-          <motion.div
-            style={{
-              ...styles.activeIndicator,
-              left: activeTab === "login" ? "0%" : "50%"
-            }}
-            transition={{ duration: 0.2 }}
-          />
-
-          <span
-            style={{
-              ...styles.tab,
-              color: activeTab === "login" ? "#1976d2" : "#555"
-            }}
-            onClick={() => setActiveTab("login")}
-          >
-            Login
-          </span>
-
-          <span
-            style={{
-              ...styles.tab,
-              color: activeTab === "register" ? "#1976d2" : "#555"
-            }}
-            onClick={() => setActiveTab("register")}
-          >
-            Register
-          </span>
-        </div>
-      </div>
-
-      {/* Login/Register Forms */}
-      <AnimatePresence>
-        {activeTab === "login" ? (
-          <motion.div
-            key="login"
-            initial={{ opacity: 0.8, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0.8, x: 20 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Login onSuccess={handleAuthSuccess} />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="register"
-            initial={{ opacity: 0.8, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0.8, x: -20 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Register onSuccess={handleAuthSuccess} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+  
+  // Check if trying to access admin route
+  const isAdminRoute = window.location.pathname.startsWith('/admin');
+  if (isAdminRoute) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user.role !== "admin") {
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+  
+  return children;
 }
 
-const styles = {
-  toggleWrapper: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "25px"
-  },
-  toggle: {
-    position: "relative",
-    display: "flex",
-    width: "300px",
-    background: "#f1f5f9",
-    borderRadius: "30px",
-    padding: "5px"
-  },
-  tab: {
-    flex: 1,
-    textAlign: "center",
-    padding: "10px 0",
-    cursor: "pointer",
-    fontWeight: "600",
-    zIndex: 1
-  },
-  activeIndicator: {
-    position: "absolute",
-    top: "5px",
-    width: "50%",
-    height: "40px",
-    background: "#fff",
-    borderRadius: "30px",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.15)"
-  }
-};
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    // Check if user was previously logged in
+    return localStorage.getItem("isLoggedIn") === "true";
+  });
+
+  // Called when login/register is successful
+  const handleAuthSuccess = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem("isLoggedIn", "true");
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  };
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route 
+          path="/login" 
+          element={
+            isLoggedIn ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Login onSuccess={handleAuthSuccess} />
+            )
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            isLoggedIn ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Register onSuccess={handleAuthSuccess} />
+            )
+          } 
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isLoggedIn}>
+              <div className="App">
+                <nav className="navbar">
+                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                  </Link>
+                  <div className="nav-links">
+                    <Link to="/book">Book Appointment</Link>
+                    <Link to="/appointments">My Appointments</Link>
+                    <button 
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid white",
+                        color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </nav>
+                <DashboardPage />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/book"
+          element={
+            <ProtectedRoute isAuthenticated={isLoggedIn}>
+              <div className="App">
+                <nav className="navbar">
+                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                  </Link>
+                  <div className="nav-links">
+                    <Link to="/book">Book Appointment</Link>
+                    <Link to="/appointments">My Appointments</Link>
+                    <button 
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid white",
+                        color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </nav>
+                <BookAppointment />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appointments"
+          element={
+            <ProtectedRoute isAuthenticated={isLoggedIn}>
+              <div className="App">
+                <nav className="navbar">
+                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                  </Link>
+                  <div className="nav-links">
+                    <Link to="/book">Book Appointment</Link>
+                    <Link to="/appointments">My Appointments</Link>
+                    <button 
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid white",
+                        color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </nav>
+                <MyAppointments />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isLoggedIn}>
+              <div className="App">
+                <nav className="navbar">
+                  <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                    <h1>CureLink - Admin Dashboard</h1>
+                  </Link>
+                  <div className="nav-links">
+                    <button 
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid white",
+                        color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </nav>
+                <AdminDashboard />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isLoggedIn}>
+              <div className="App">
+                <nav className="navbar">
+                  <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                    <h1>CureLink - Admin Dashboard</h1>
+                  </Link>
+                  <div className="nav-links">
+                    <button 
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid white",
+                        color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </nav>
+                <AdminDashboard />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Default redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;

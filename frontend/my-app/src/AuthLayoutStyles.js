@@ -119,6 +119,30 @@ roleButton: {
   transition: "0.3s"
 },
 
+navBar: {
+  position: "absolute",
+  top: "20px",
+  left: "20px",
+  right: "20px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  zIndex: 10
+},
+
+navLink: {
+  color: "#1f2937",
+  textDecoration: "none",
+  fontSize: "14px",
+  fontWeight: 500,
+  padding: "8px 16px",
+  borderRadius: "8px",
+  background: "rgba(255, 255, 255, 0.9)",
+  transition: "all 0.3s ease",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+  display: "inline-block"
+},
+
 };
 
 export default authLayoutStyles;
