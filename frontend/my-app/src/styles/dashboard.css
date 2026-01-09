@@ -5,7 +5,7 @@
 }
 
 :root{
-  --bg:#f8fafc;
+  --bg:#0d4175;
   --card:#ffffff;
   --muted:#6b7280;
   --primary:#2563eb;
@@ -14,12 +14,13 @@
 }
 
 .dashboard-page{
-  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  background: linear-gradient(180deg, #82afdb 0%, #7e8ec2 100%);
   min-height: 100vh;
   padding: 28px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+    
 }
 
 .dl-container{
@@ -28,7 +29,7 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.75));
   padding: 22px;
   border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(2,6,23,0.06);
+  box-shadow: 0 12px 40px rgba(1, 2, 73, 0.06);
   backdrop-filter: blur(6px);
   flex-shrink: 0;
 }
