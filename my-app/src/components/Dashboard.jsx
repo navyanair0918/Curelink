@@ -12,16 +12,28 @@ const Dashboard = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div className="dashboard">
-      <h2>My Appointments</h2>
-      {appointments.map(app => (
-        <div className="card" key={app._id}>
-          <p><b>Date:</b> {app.date}</p>
-          <p><b>Time:</b> {app.time}</p>
-          <p><b>Status:</b> {app.status}</p>
+    <section className="dashboard">
+      <div className="dashboard-head">
+        <h2>My Appointments</h2>
+        <p className="muted">Upcoming and recent appointments</p>
+      </div>
+
+      {appointments.length === 0 ? (
+        <div className="empty">No appointments to show.</div>
+      ) : (
+        <div className="cards-grid">
+          {appointments.map(app => (
+            <article className="card" key={app._id}>
+              <div className="card-row">
+                <div className="card-date">{app.date}</div>
+                <div className={`pill ${app.status?.toLowerCase()}`}>{app.status}</div>
+              </div>
+              <div className="card-time">{app.time}</div>
+            </article>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+    </section>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
+import "../styles/dashboard.css";
 
 const Notifications = ({ userId }) => {
   const [notifications, setNotifications] = useState([]);
@@ -11,14 +12,21 @@ const Notifications = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div>
-      <h2>Notifications</h2>
-      {notifications.map(note => (
-        <div key={note._id} className="card">
-          <p>{note.message}</p>
-        </div>
-      ))}
-    </div>
+    <aside className="notifications-panel">
+      <div className="panel-head">
+        <h3>Notifications</h3>
+        <p className="muted">Latest alerts</p>
+      </div>
+      <div className="notes">
+        {notifications.length === 0 && <div className="empty">No notifications</div>}
+        {notifications.map(note => (
+          <div key={note._id} className="note">
+            <p>{note.message}</p>
+            <div className="note-meta">{note.date}</div>
+          </div>
+        ))}
+      </div>
+    </aside>
   );
 };
 
