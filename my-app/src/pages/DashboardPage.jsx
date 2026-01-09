@@ -7,6 +7,7 @@ const DashboardPage = () => {
 
   return (
     <div className="dashboard-page">
+      <div className="dl-container">
       <header className="dl-header">
         <div>
           <h1>Welcome Back</h1>
@@ -24,6 +25,7 @@ const DashboardPage = () => {
         <aside className="dl-aside">
           <Notifications userId={userId} />
         </aside>
+      </div>
       </div>
     </div>
   );
