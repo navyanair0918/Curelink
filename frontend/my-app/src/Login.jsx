@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { authAPI } from "./services/api";
 import styles from "./AuthLayoutStyles";
 import "./Auth.css";
+import "./AuthResponsive.css";
+import "./AuthFullPage.css";
 
 function Login({ onSuccess }) {
   const navigate = useNavigate();
@@ -36,7 +38,9 @@ function Login({ onSuccess }) {
     setMessage("");
 
     try {
-      const response = await authAPI.login({ email, password, role });
+      // Normalize role to lowercase before sending
+      const normalizedRole = role.toLowerCase();
+      const response = await authAPI.login({ email, password, role: normalizedRole });
       
       if (response.data.success) {
         // Store token and user info
@@ -68,7 +72,7 @@ function Login({ onSuccess }) {
   };
 
   return (
-    <div style={styles.page}>
+    <div className="auth-page-wrapper" style={styles.page}>
       {/* Navigation */}
       <div style={styles.navBar}>
         <Link to="/" style={styles.navLink} className="auth-nav-link">← Back to Home</Link>
@@ -93,7 +97,7 @@ function Login({ onSuccess }) {
                 onClick={() => setRole(r)}
                 style={{
                   ...styles.roleButton,
-                  background: role === r ? "#4f46e5" : "transparent",
+                  background: role === r ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "transparent",
                   color: role === r ? "#fff" : "#334155"
                 }}
               >
@@ -163,9 +167,9 @@ function Login({ onSuccess }) {
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <h3>Why Login?</h3>
-          <p>✔ Consult doctors anytime</p>
-          <p>✔ Secure health records</p>
+          <h3 style={styles.rightH3}>Why Login?</h3>
+          <p style={styles.rightP}>✔ Consult doctors anytime</p>
+          <p style={styles.rightP}>✔ Secure health records</p>
         </motion.div>
       </motion.div>
     </div>

@@ -39,8 +39,10 @@ const register = async (req, res) => {
     }
 
     // Validate role - only patient or doctor allowed (admin cannot be registered)
+    // Normalize role to lowercase
+    const normalizedRole = role ? role.toLowerCase() : 'patient';
     const allowedRoles = ['patient', 'doctor'];
-    const userRole = role || 'patient';
+    const userRole = normalizedRole;
     if (!allowedRoles.includes(userRole)) {
       return res.status(400).json({ 
         success: false,
@@ -58,12 +60,24 @@ const register = async (req, res) => {
     }
 
     // Create new user
-    const user = new User({
+    const userData = {
       name: name.trim(),
       email: email.toLowerCase(),
       password, // Will be hashed by pre-save hook
       role: userRole
-    });
+    };
+
+    // Add doctor-specific fields if registering as doctor
+    if (userRole === 'doctor') {
+      if (req.body.degree) {
+        userData.degree = req.body.degree.trim();
+      }
+      if (req.body.specialization) {
+        userData.specialization = req.body.specialization.trim();
+      }
+    }
+
+    const user = new User(userData);
 
     await user.save();
 
@@ -126,8 +140,8 @@ const login = async (req, res) => {
 
     console.log(`User found: ${user.email}, Role: ${user.role}, Requested role: ${role}`);
 
-    // Check role if provided
-    if (role && user.role !== role) {
+    // Check role if provided (case-insensitive comparison)
+    if (role && user.role.toLowerCase() !== role.toLowerCase()) {
       console.log(`Role mismatch: User role is ${user.role}, but ${role} was requested`);
       return res.status(403).json({ 
         success: false,

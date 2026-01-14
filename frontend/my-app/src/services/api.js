@@ -34,4 +34,9 @@ export const adminAPI = {
   getDashboardStats: () => API.get("/admin/stats"),
 };
 
+// User API functions
+export const userAPI = {
+  updateProfile: (profileData) => API.put("/users/profile", profileData),
+};
+
 export default API;

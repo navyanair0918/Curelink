@@ -1,25 +1,32 @@
 const authLayoutStyles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #8fb6e8, #eaf2fb)",
+    width: "100%",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     display: "flex",
     flexDirection: "column",
-  alignItems: "center",
-  paddingTop: "80px" 
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+    boxSizing: "border-box",
+    margin: 0,
   },
 
   card: {
-    width: "900px",
+    width: "100%",
+    maxWidth: "900px",
     display: "flex",
-    background: "linear-gradient(to bottom, #ffffff, #f3f7fc)",
+    background: "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(243,247,252,0.95))",
     borderRadius: "20px",
     overflow: "hidden",
-    boxShadow: "0 25px 60px rgba(0,0,0,0.12)",
+    boxShadow: "0 25px 60px rgba(0,0,0,0.15)",
+    flexDirection: "row",
+    backdropFilter: "blur(10px)",
   },
 
   left: {
     width: "55%",
-     padding: "32px 40px",
+    padding: "clamp(24px, 4vw, 40px)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -29,14 +36,28 @@ const authLayoutStyles = {
     width: "45%",
     background: "linear-gradient(135deg, #e9f1fb, #f7faff)",
     color: "#1f2937",
-    padding: "48px",
+    padding: "clamp(32px, 5vw, 48px)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
   },
+  
+  rightH3: {
+    fontSize: "clamp(18px, 3vw, 22px)",
+    fontWeight: 600,
+    marginBottom: "16px",
+    color: "#1f2937",
+  },
+  
+  rightP: {
+    fontSize: "clamp(14px, 2vw, 16px)",
+    marginBottom: "12px",
+    color: "#4b5563",
+    lineHeight: "1.6",
+  },
 
   title: {
-    fontSize: "26px",
+    fontSize: "clamp(22px, 4vw, 26px)",
     fontWeight: 700,
     marginBottom: "14px",
     color: "#0f172a",
@@ -44,28 +65,31 @@ const authLayoutStyles = {
 
   input: {
     width: "100%",
-    padding: "14px 16px",
+    padding: "clamp(12px, 2vw, 14px) clamp(14px, 2vw, 16px)",
     marginBottom: "16px",
     borderRadius: "10px",
     border: "1px solid #dbe3f0",
-    fontSize: "15px",
+    fontSize: "clamp(14px, 2vw, 15px)",
     outline: "none",
+    boxSizing: "border-box",
+    backgroundColor: "#ffffff",
+    color: "#1f2937",
   },
 
   button: {
-  width: "100%",
-  padding: "14px",
-  background: "linear-gradient(135deg, #3b82f6, #7c3aed)", // blue → purple
-  color: "#ffffff",
-  border: "none",
-  borderRadius: "14px",
-  fontSize: "16px",
-  fontWeight: 600,
-  cursor: "pointer",
-  marginTop: "14px",
-  boxShadow: "0 10px 25px rgba(59,130,246,0.35)",
-  transition: "all 0.3s ease"
-},
+    width: "100%",
+    padding: "clamp(12px, 2vw, 14px)",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "14px",
+    fontSize: "clamp(14px, 2vw, 16px)",
+    fontWeight: 600,
+    cursor: "pointer",
+    marginTop: "14px",
+    boxShadow: "0 10px 25px rgba(102, 126, 234, 0.35)",
+    transition: "all 0.3s ease",
+  },
 
 
   error: {
@@ -112,12 +136,27 @@ roleToggle: {
 roleButton: {
   flex: 1,
   border: "none",
-  padding: "10px",
+  padding: "clamp(8px, 1.5vw, 10px)",
   borderRadius: "20px",
-  fontSize: "14px",
+  fontSize: "clamp(12px, 2vw, 14px)",
   cursor: "pointer",
-  transition: "0.3s"
+  transition: "0.3s",
+  fontWeight: 500,
 },
+  
+  select: {
+    width: "100%",
+    padding: "clamp(12px, 2vw, 14px) clamp(14px, 2vw, 16px)",
+    marginBottom: "16px",
+    borderRadius: "10px",
+    border: "1px solid #dbe3f0",
+    fontSize: "clamp(14px, 2vw, 15px)",
+    outline: "none",
+    boxSizing: "border-box",
+    backgroundColor: "#ffffff",
+    color: "#1f2937",
+    cursor: "pointer",
+  },
 
 navBar: {
   position: "absolute",

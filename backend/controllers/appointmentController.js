@@ -12,9 +12,33 @@ const bookAppointment = async (req, res) => {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
+    // Check if user is a patient (only patients can book appointments)
+    if (req.user?.role !== 'patient') {
+      return res.status(403).json({ message: 'Only patients can book appointments' });
+    }
+
     // Validate required fields
     if (!doctorId || !date || !timeSlot) {
       return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Check for existing appointment conflict (same doctor, date, and time slot)
+    const appointmentDate = new Date(date);
+    const existingAppointment = await Appointment.findOne({
+      doctorId,
+      date: {
+        $gte: new Date(appointmentDate.setHours(0, 0, 0, 0)),
+        $lt: new Date(appointmentDate.setHours(23, 59, 59, 999))
+      },
+      timeSlot,
+      status: { $in: ['Pending', 'Confirmed'] } // Only check active appointments
+    });
+
+    if (existingAppointment) {
+      return res.status(409).json({ 
+        message: 'This time slot is already booked. Please choose another time slot.',
+        conflict: true
+      });
     }
 
     // Create new appointment
@@ -27,7 +51,7 @@ const bookAppointment = async (req, res) => {
     });
 
     await appointment.save();
-    await appointment.populate('doctorId', 'name email');
+    await appointment.populate('doctorId', 'name email degree specialization');
     await appointment.populate('patientId', 'name email');
 
     res.status(201).json({

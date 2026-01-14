@@ -84,7 +84,7 @@ function LandingPage() {
 
       {/* Footer */}
       <footer className="landing-footer">
-        <p>&copy; 2024 CureLink. All rights reserved.</p>
+        <p>&copy; 2026 CureLink. All rights reserved.</p>
       </footer>
     </div>
   );

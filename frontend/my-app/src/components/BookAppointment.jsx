@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../services/api';
 import './BookAppointment.css';
 
 const BookAppointment = () => {
@@ -18,25 +18,27 @@ const BookAppointment = () => {
     '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM'
   ];
 
-  // Fetch doctors list (assuming you have an API endpoint for this)
+  // Fetch doctors list
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const token = localStorage.getItem('token');
-        // Note: You may need to create a GET /api/users/doctors endpoint
-        // For now, this is a placeholder - adjust based on your actual API
-        const response = await axios.get('/api/users/doctors', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setDoctors(response.data.doctors || []);
+        const response = await API.get('/users/doctors');
+        console.log('Doctors API response:', response.data);
+        if (response.data.success) {
+          const doctorsList = response.data.doctors || [];
+          setDoctors(Array.isArray(doctorsList) ? doctorsList : []);
+          if (doctorsList.length === 0) {
+            setMessage('No doctors available. Please contact admin to add doctors.');
+          }
+        } else {
+          setMessage('Failed to load doctors. Please try again.');
+        }
       } catch (error) {
         console.error('Error fetching doctors:', error);
-        // Fallback: You can manually add some doctors for testing
-        setDoctors([
-          { _id: '1', name: 'Dr. John Smith' },
-          { _id: '2', name: 'Dr. Sarah Johnson' },
-          { _id: '3', name: 'Dr. Michael Brown' }
-        ]);
+        const errorMsg = error.response?.data?.message || 'Failed to load doctors. Please try again.';
+        setMessage(errorMsg);
+        // Set empty array so dropdown doesn't break
+        setDoctors([]);
       }
     };
 
@@ -64,30 +66,28 @@ const BookAppointment = () => {
     }
 
     try {
-      const response = await axios.post(
-        '/api/appointments',
-        {
-          doctorId: selectedDoctor,
-          date,
-          timeSlot
-        },
-        {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await API.post('/appointments', {
+        doctorId: selectedDoctor,
+        date,
+        timeSlot
+      });
 
       setMessage('Appointment booked successfully!');
       // Reset form
       setSelectedDoctor('');
       setDate('');
       setTimeSlot('');
+      setTimeout(() => setMessage(''), 5000);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error booking appointment';
+      const isConflict = error.response?.data?.conflict || error.response?.status === 409;
       setMessage(errorMessage);
       console.error('Booking error:', error.response?.data || error);
+      
+      // If conflict, highlight the error
+      if (isConflict) {
+        setTimeout(() => setMessage(''), 8000);
+      }
     } finally {
       setLoading(false);
     }
@@ -111,7 +111,7 @@ const BookAppointment = () => {
             <option value="">Choose a doctor</option>
             {doctors.map((doctor) => (
               <option key={doctor._id} value={doctor._id}>
-                {doctor.name}
+                {doctor.name} - {doctor.specialization || 'General'} ({doctor.degree || 'MBBS'})
               </option>
             ))}
           </select>

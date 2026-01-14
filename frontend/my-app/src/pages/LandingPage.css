@@ -26,7 +26,7 @@
 }
 
 .logo {
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
   font-weight: 700;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -87,7 +87,7 @@
 }
 
 .main-heading {
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
   font-weight: 800;
   color: white;
   margin-bottom: 1.5rem;
@@ -96,7 +96,7 @@
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 2.5rem;
   line-height: 1.6;
@@ -174,12 +174,13 @@
 }
 
 .feature-card h3 {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
   color: #333;
   margin-bottom: 0.5rem;
 }
 
 .feature-card p {
+  font-size: clamp(0.9rem, 2vw, 1rem);
   color: #666;
   line-height: 1.6;
 }

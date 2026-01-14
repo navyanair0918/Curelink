@@ -10,18 +10,39 @@ import DashboardPage from "./pages/DashboardPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import "./App.css";
 
+// Helper function to get user role
+const getUserRole = () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return user.role || null;
+  } catch {
+    return null;
+  }
+};
+
 // Protected Route Component
-function ProtectedRoute({ children, isAuthenticated }) {
+function ProtectedRoute({ children, isAuthenticated, requireAdmin = false }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   
   // Check if trying to access admin route
   const isAdminRoute = window.location.pathname.startsWith('/admin');
-  if (isAdminRoute) {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user.role !== "admin") {
+  const userRole = getUserRole();
+  const currentPath = window.location.pathname;
+  
+  // If accessing admin route, check if user is admin
+  if (isAdminRoute || requireAdmin) {
+    if (userRole !== "admin") {
       return <Navigate to="/dashboard" replace />;
+    }
+  }
+  
+  // If admin tries to access patient/doctor routes, redirect to admin dashboard
+  if (userRole === "admin" && !isAdminRoute) {
+    const patientRoutes = ["/dashboard", "/book", "/appointments"];
+    if (patientRoutes.includes(currentPath)) {
+      return <Navigate to="/admin/dashboard" replace />;
     }
   }
   
@@ -56,7 +77,11 @@ function App() {
           path="/login" 
           element={
             isLoggedIn ? (
-              <Navigate to="/dashboard" replace />
+              getUserRole() === "admin" ? (
+                <Navigate to="/admin/dashboard" replace />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
             ) : (
               <Login onSuccess={handleAuthSuccess} />
             )
@@ -66,7 +91,11 @@ function App() {
           path="/register" 
           element={
             isLoggedIn ? (
-              <Navigate to="/dashboard" replace />
+              getUserRole() === "admin" ? (
+                <Navigate to="/admin/dashboard" replace />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
             ) : (
               <Register onSuccess={handleAuthSuccess} />
             )
@@ -84,7 +113,9 @@ function App() {
                     <h1>CureLink - Digital Appointment and Health Record Portal</h1>
                   </Link>
                   <div className="nav-links">
-                    <Link to="/book">Book Appointment</Link>
+                    {getUserRole() !== "doctor" && (
+                      <Link to="/book">Book Appointment</Link>
+                    )}
                     <Link to="/appointments">My Appointments</Link>
                     <button 
                       onClick={handleLogout}
@@ -117,7 +148,9 @@ function App() {
                     <h1>CureLink - Digital Appointment and Health Record Portal</h1>
                   </Link>
                   <div className="nav-links">
-                    <Link to="/book">Book Appointment</Link>
+                    {getUserRole() !== "doctor" && (
+                      <Link to="/book">Book Appointment</Link>
+                    )}
                     <Link to="/appointments">My Appointments</Link>
                     <button 
                       onClick={handleLogout}
@@ -150,7 +183,9 @@ function App() {
                     <h1>CureLink - Digital Appointment and Health Record Portal</h1>
                   </Link>
                   <div className="nav-links">
-                    <Link to="/book">Book Appointment</Link>
+                    {getUserRole() !== "doctor" && (
+                      <Link to="/book">Book Appointment</Link>
+                    )}
                     <Link to="/appointments">My Appointments</Link>
                     <button 
                       onClick={handleLogout}
@@ -178,40 +213,7 @@ function App() {
         <Route
           path="/admin/dashboard"
           element={
-            <ProtectedRoute isAuthenticated={isLoggedIn}>
-              <div className="App">
-                <nav className="navbar">
-                  <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                    <h1>CureLink - Admin Dashboard</h1>
-                  </Link>
-                  <div className="nav-links">
-                    <button 
-                      onClick={handleLogout}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid white",
-                        color: "white",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: 500
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </nav>
-                <AdminDashboard />
-              </div>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Admin Routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute isAuthenticated={isLoggedIn}>
+            <ProtectedRoute isAuthenticated={isLoggedIn} requireAdmin={true}>
               <div className="App">
                 <nav className="navbar">
                   <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "white" }}>

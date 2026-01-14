@@ -4,7 +4,7 @@ import { adminAPI } from "../services/api";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("stats");
+  const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState(null);
   const [patients, setPatients] = useState([]);
@@ -14,17 +14,28 @@ function AdminDashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchDashboardStats();
+    // Load all data on initial mount
+    const loadInitialData = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([
+          fetchDashboardStats(),
+          fetchAllUsers(),
+          fetchPatients(),
+          fetchDoctors()
+        ]);
+      } catch (err) {
+        setError("Failed to load dashboard data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadInitialData();
   }, []);
 
   useEffect(() => {
-    if (activeTab === "users") {
-      fetchAllUsers();
-    } else if (activeTab === "patients") {
-      fetchPatients();
-    } else if (activeTab === "doctors") {
-      fetchDoctors();
-    } else if (activeTab === "appointments") {
+    if (activeTab === "appointments") {
       fetchAppointments();
     }
   }, [activeTab]);
@@ -36,10 +47,8 @@ function AdminDashboard() {
         setStats(response.data.stats);
       }
     } catch (err) {
-      setError("Failed to load statistics");
-      console.error(err);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching stats:", err);
+      setError(prev => prev || "Failed to load statistics");
     }
   };
 
@@ -48,12 +57,13 @@ function AdminDashboard() {
       const response = await adminAPI.getAllUsers();
       if (response.data.success) {
         setUsers(response.data);
-        setPatients(response.data.patients.data);
-        setDoctors(response.data.doctors.data);
+        setPatients(response.data.patients?.data || []);
+        setDoctors(response.data.doctors?.data || []);
       }
     } catch (err) {
-      setError("Failed to load users");
-      console.error(err);
+      console.error("Error fetching all users:", err);
+      const errorMsg = err.response?.data?.message || "Failed to load users";
+      setError(prev => prev || errorMsg);
     }
   };
 
@@ -61,11 +71,14 @@ function AdminDashboard() {
     try {
       const response = await adminAPI.getAllPatients();
       if (response.data.success) {
-        setPatients(response.data.patients);
+        // API returns { success: true, count: X, patients: [...] }
+        const patientsData = response.data.patients || [];
+        setPatients(Array.isArray(patientsData) ? patientsData : []);
       }
     } catch (err) {
-      setError("Failed to load patients");
-      console.error(err);
+      console.error("Error fetching patients:", err);
+      const errorMsg = err.response?.data?.message || "Failed to load patients";
+      setError(prev => prev || errorMsg);
     }
   };
 
@@ -73,11 +86,14 @@ function AdminDashboard() {
     try {
       const response = await adminAPI.getAllDoctors();
       if (response.data.success) {
-        setDoctors(response.data.doctors);
+        // API returns { success: true, count: X, doctors: [...] }
+        const doctorsData = response.data.doctors || [];
+        setDoctors(Array.isArray(doctorsData) ? doctorsData : []);
       }
     } catch (err) {
-      setError("Failed to load doctors");
-      console.error(err);
+      console.error("Error fetching doctors:", err);
+      const errorMsg = err.response?.data?.message || "Failed to load doctors";
+      setError(prev => prev || errorMsg);
     }
   };
 
@@ -93,10 +109,10 @@ function AdminDashboard() {
     }
   };
 
-  if (loading && !stats) {
+  if (loading) {
     return (
       <div className="admin-dashboard">
-        <div className="loading">Loading...</div>
+        <div className="loading">Loading dashboard data...</div>
       </div>
     );
   }
@@ -111,28 +127,28 @@ function AdminDashboard() {
       {/* Tabs */}
       <div className="admin-tabs">
         <button
+          className={activeTab === "overview" ? "active" : ""}
+          onClick={() => setActiveTab("overview")}
+        >
+          Overview
+        </button>
+        <button
           className={activeTab === "stats" ? "active" : ""}
           onClick={() => setActiveTab("stats")}
         >
           Statistics
         </button>
         <button
-          className={activeTab === "users" ? "active" : ""}
-          onClick={() => setActiveTab("users")}
-        >
-          All Users
-        </button>
-        <button
           className={activeTab === "patients" ? "active" : ""}
           onClick={() => setActiveTab("patients")}
         >
-          Patients ({stats?.users.patients || 0})
+          Patients ({stats?.users.patients || patients.length || 0})
         </button>
         <button
           className={activeTab === "doctors" ? "active" : ""}
           onClick={() => setActiveTab("doctors")}
         >
-          Doctors ({stats?.users.doctors || 0})
+          Doctors ({stats?.users.doctors || doctors.length || 0})
         </button>
         <button
           className={activeTab === "appointments" ? "active" : ""}
@@ -145,6 +161,67 @@ function AdminDashboard() {
       {/* Content */}
       <div className="admin-content">
         {error && <div className="error-message">{error}</div>}
+
+        {activeTab === "overview" && (
+          <div className="overview-section">
+            <h2 className="overview-title">Patients & Doctors Overview</h2>
+            <div className="users-grid">
+              <div className="users-column">
+                <h2>All Patients ({patients.length})</h2>
+                <div className="users-list">
+                  {patients.length > 0 ? (
+                    patients.map((patient) => (
+                      <div key={patient._id} className="user-card">
+                        <div className="user-info">
+                          <h4>{patient.name}</h4>
+                          <p><strong>Email:</strong> {patient.email}</p>
+                          <p><strong>User ID:</strong> {patient._id}</p>
+                          <span className="user-role patient">Patient</span>
+                        </div>
+                        <div className="user-meta">
+                          <p><strong>Joined:</strong> {new Date(patient.createdAt).toLocaleDateString()}</p>
+                          <p><strong>Account Created:</strong> {new Date(patient.createdAt).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="empty-state">
+                      <p>No patients found</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="users-column">
+                <h2>All Doctors ({doctors.length})</h2>
+                <div className="users-list">
+                  {doctors.length > 0 ? (
+                    doctors.map((doctor) => (
+                      <div key={doctor._id} className="user-card">
+                        <div className="user-info">
+                          <h4>{doctor.name}</h4>
+                          <p><strong>Email:</strong> {doctor.email}</p>
+                          {doctor.degree && <p><strong>Degree:</strong> {doctor.degree}</p>}
+                          {doctor.specialization && <p><strong>Specialization:</strong> {doctor.specialization}</p>}
+                          <p><strong>User ID:</strong> {doctor._id}</p>
+                          <span className="user-role doctor">Doctor</span>
+                        </div>
+                        <div className="user-meta">
+                          <p><strong>Joined:</strong> {new Date(doctor.createdAt).toLocaleDateString()}</p>
+                          <p><strong>Account Created:</strong> {new Date(doctor.createdAt).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="empty-state">
+                      <p>No doctors found</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {activeTab === "stats" && stats && (
           <div className="stats-grid">
@@ -213,76 +290,30 @@ function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === "users" && (
-          <div className="users-section">
-            <div className="users-grid">
-              <div className="users-column">
-                <h2>Patients ({users?.patients.count || 0})</h2>
-                <div className="users-list">
-                  {patients.length > 0 ? (
-                    patients.map((patient) => (
-                      <div key={patient._id} className="user-card">
-                        <div className="user-info">
-                          <h4>{patient.name}</h4>
-                          <p>{patient.email}</p>
-                          <span className="user-role patient">Patient</span>
-                        </div>
-                        <div className="user-meta">
-                          <p>Joined: {new Date(patient.createdAt).toLocaleDateString()}</p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No patients found</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="users-column">
-                <h2>Doctors ({users?.doctors.count || 0})</h2>
-                <div className="users-list">
-                  {doctors.length > 0 ? (
-                    doctors.map((doctor) => (
-                      <div key={doctor._id} className="user-card">
-                        <div className="user-info">
-                          <h4>{doctor.name}</h4>
-                          <p>{doctor.email}</p>
-                          <span className="user-role doctor">Doctor</span>
-                        </div>
-                        <div className="user-meta">
-                          <p>Joined: {new Date(doctor.createdAt).toLocaleDateString()}</p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No doctors found</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {activeTab === "patients" && (
           <div className="table-section">
-            <h2>All Patients</h2>
+            <h2>All Patients ({patients.length})</h2>
             <div className="users-list">
               {patients.length > 0 ? (
                 patients.map((patient) => (
                   <div key={patient._id} className="user-card">
                     <div className="user-info">
                       <h4>{patient.name}</h4>
-                      <p>{patient.email}</p>
+                      <p><strong>Email:</strong> {patient.email}</p>
+                      <p><strong>User ID:</strong> {patient._id}</p>
                       <span className="user-role patient">Patient</span>
                     </div>
                     <div className="user-meta">
-                      <p>ID: {patient._id}</p>
-                      <p>Joined: {new Date(patient.createdAt).toLocaleDateString()}</p>
+                      <p><strong>Joined:</strong> {new Date(patient.createdAt).toLocaleDateString()}</p>
+                      <p><strong>Account Created:</strong> {new Date(patient.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p>No patients found</p>
+                <div className="empty-state">
+                  <p>No patients found</p>
+                </div>
               )}
             </div>
           </div>
@@ -290,24 +321,29 @@ function AdminDashboard() {
 
         {activeTab === "doctors" && (
           <div className="table-section">
-            <h2>All Doctors</h2>
+            <h2>All Doctors ({doctors.length})</h2>
             <div className="users-list">
               {doctors.length > 0 ? (
                 doctors.map((doctor) => (
                   <div key={doctor._id} className="user-card">
                     <div className="user-info">
                       <h4>{doctor.name}</h4>
-                      <p>{doctor.email}</p>
+                      <p><strong>Email:</strong> {doctor.email}</p>
+                      {doctor.degree && <p><strong>Degree:</strong> {doctor.degree}</p>}
+                      {doctor.specialization && <p><strong>Specialization:</strong> {doctor.specialization}</p>}
+                      <p><strong>User ID:</strong> {doctor._id}</p>
                       <span className="user-role doctor">Doctor</span>
                     </div>
                     <div className="user-meta">
-                      <p>ID: {doctor._id}</p>
-                      <p>Joined: {new Date(doctor.createdAt).toLocaleDateString()}</p>
+                      <p><strong>Joined:</strong> {new Date(doctor.createdAt).toLocaleDateString()}</p>
+                      <p><strong>Account Created:</strong> {new Date(doctor.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p>No doctors found</p>
+                <div className="empty-state">
+                  <p>No doctors found</p>
+                </div>
               )}
             </div>
           </div>
