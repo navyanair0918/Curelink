@@ -4,12 +4,15 @@ import Dashboard from "../components/Dashboard";
 import Notifications from "../components/Notifications";
 import DoctorDashboard from "../components/DoctorDashboard";
 import DoctorProfileModal from "../components/DoctorProfileModal";
+import PatientRecords from "../components/PatientRecords";
+import DoctorRecordUpdate from "../components/DoctorRecordUpdate";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("appointments");
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
@@ -44,10 +47,29 @@ const DashboardPage = () => {
           <header className="dl-header">
             <div>
               <h1>Welcome Back, Dr. {user?.name || "Doctor"}</h1>
-              <p className="muted">Manage your patient appointments</p>
+              <p className="muted">Manage your patient appointments and records</p>
             </div>
           </header>
-          <DoctorDashboard />
+          
+          {/* Tab Navigation */}
+          <div className="doctor-tabs">
+            <button
+              className={activeTab === "appointments" ? "active" : ""}
+              onClick={() => setActiveTab("appointments")}
+            >
+              Appointments
+            </button>
+            <button
+              className={activeTab === "records" ? "active" : ""}
+              onClick={() => setActiveTab("records")}
+            >
+              Patient Records
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === "appointments" && <DoctorDashboard />}
+          {activeTab === "records" && <DoctorRecordUpdate />}
         </div>
       </div>
     );
@@ -55,6 +77,7 @@ const DashboardPage = () => {
 
   // Show patient dashboard for patients
   const userId = "USER_ID_FROM_MONGODB";
+  
   return (
     <div className="dashboard-page">
       <div className="dl-container">
@@ -70,14 +93,36 @@ const DashboardPage = () => {
           </div>
         </header>
 
-        <div className="dl-grid">
-          <main className="dl-main">
-            <Dashboard userId={userId} />
-          </main>
-          <aside className="dl-aside">
-            <Notifications userId={userId} />
-          </aside>
+        {/* Tab Navigation */}
+        <div className="patient-tabs">
+          <button
+            className={activeTab === "appointments" ? "active" : ""}
+            onClick={() => setActiveTab("appointments")}
+          >
+            Appointments
+          </button>
+          <button
+            className={activeTab === "records" ? "active" : ""}
+            onClick={() => setActiveTab("records")}
+          >
+            Medical Records
+          </button>
         </div>
+
+        {/* Tab Content */}
+        {activeTab === "appointments" && (
+          <div className="dl-grid">
+            <main className="dl-main">
+              <Dashboard userId={userId} />
+            </main>
+            <aside className="dl-aside">
+              <Notifications userId={userId} />
+            </aside>
+          </div>
+        )}
+        {activeTab === "records" && (
+          <PatientRecords />
+        )}
       </div>
     </div>
   );

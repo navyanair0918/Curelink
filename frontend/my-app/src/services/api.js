@@ -39,4 +39,24 @@ export const userAPI = {
   updateProfile: (profileData) => API.put("/users/profile", profileData),
 };
 
+// Patient Record API functions
+export const recordAPI = {
+  // Upload a record (FormData with file, category, title, description)
+  uploadRecord: (formData) => API.post("/records/upload", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
+  // Get patient's own records
+  getMyRecords: () => API.get("/records/my-records"),
+  // Get patient records by username (doctor only)
+  getPatientRecordsByUsername: (username) => API.get(`/records/patient/${username}`),
+  // Update prescription/diagnosis (doctor only)
+  updateRecord: (recordId, data) => API.put(`/records/${recordId}/update`, data),
+  // Get file URL
+  getRecordFileUrl: (recordId) => `http://localhost:5000/api/records/${recordId}/file`,
+  // Delete a record
+  deleteRecord: (recordId) => API.delete(`/records/${recordId}`),
+};
+
 export default API;

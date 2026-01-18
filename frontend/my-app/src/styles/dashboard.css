@@ -230,6 +230,64 @@
   }
 }
 
+/* Tab Navigation Styles */
+.doctor-tabs,
+.patient-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.doctor-tabs button,
+.patient-tabs button {
+  background: none;
+  border: none;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.doctor-tabs button:hover,
+.patient-tabs button:hover {
+  color: #3498db;
+}
+
+.doctor-tabs button.active,
+.patient-tabs button.active {
+  color: #3498db;
+  border-bottom-color: #3498db;
+}
+
+/* Dark mode support for tabs */
+@media (prefers-color-scheme: dark) {
+  .doctor-tabs,
+  .patient-tabs {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .doctor-tabs button,
+  .patient-tabs button {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .doctor-tabs button:hover,
+  .patient-tabs button:hover {
+    color: #60a5fa;
+  }
+  
+  .doctor-tabs button.active,
+  .patient-tabs button.active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
+  }
+}
+
 @media (max-width: 880px){
   .dl-grid{
     grid-template-columns: 1fr;
@@ -247,5 +305,16 @@
   }
   .dl-header h1{
     font-size: clamp(1.1rem, 4vw, 1.4rem);
+  }
+  
+  .doctor-tabs,
+  .patient-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .doctor-tabs button,
+  .patient-tabs button {
+    padding: 10px 16px;
+    font-size: 14px;
   }
 }
