@@ -43,6 +43,17 @@ const DoctorAvailability = () => {
       return;
     }
 
+    // Validate that the selected date is not in the past
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDateTime < today) {
+      setMessage('Cannot mark past dates as unavailable');
+      return;
+    }
+
     try {
       setMessage('');
       await API.post('/availability/unavailable-date', { date: selectedDate });
@@ -75,6 +86,35 @@ const DoctorAvailability = () => {
     if (!selectedDate || !selectedTimeSlot) {
       setMessage('Please select both date and time slot');
       return;
+    }
+
+    // Validate that the selected date and time are not in the past
+    const selectedDateTime = new Date(selectedDate);
+    const today = new Date();
+
+    // Check if date is in the past
+    const selectedDateOnly = new Date(selectedDate);
+    selectedDateOnly.setHours(0, 0, 0, 0);
+    const todayOnly = new Date();
+    todayOnly.setHours(0, 0, 0, 0);
+
+    if (selectedDateOnly < todayOnly) {
+      setMessage('Cannot mark past dates as unavailable');
+      return;
+    }
+
+    // If date is today, check if the time slot is in the past
+    if (selectedDateOnly.getTime() === todayOnly.getTime()) {
+      const [timeStr, period] = selectedTimeSlot.split(' ');
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const slotHours = period === 'PM' && hours !== 12 ? hours + 12 : period === 'AM' && hours === 12 ? 0 : hours;
+      
+      selectedDateTime.setHours(slotHours, minutes, 0, 0);
+      
+      if (selectedDateTime <= today) {
+        setMessage('Cannot mark past time slots as unavailable');
+        return;
+      }
     }
 
     try {

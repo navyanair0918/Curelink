@@ -56,6 +56,16 @@ const addUnavailableDate = async (req, res) => {
       return res.status(400).json({ message: 'Date is required' });
     }
 
+    // Validate that the date is not in the past
+    const unavailableDate = new Date(date);
+    unavailableDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (unavailableDate < today) {
+      return res.status(400).json({ message: 'Cannot mark past dates as unavailable' });
+    }
+
     let availability = await DoctorAvailability.findOne({ doctorId });
     
     if (!availability) {
@@ -66,9 +76,6 @@ const addUnavailableDate = async (req, res) => {
         recurringUnavailableSlots: []
       });
     }
-
-    const unavailableDate = new Date(date);
-    unavailableDate.setHours(0, 0, 0, 0);
 
     // Check if date already exists
     const dateExists = availability.unavailableDates.some(d => {
@@ -163,6 +170,32 @@ const addUnavailableTimeSlot = async (req, res) => {
       return res.status(400).json({ message: 'Date and time slot are required' });
     }
 
+    // Validate that the date and time are not in the past
+    const slotDate = new Date(date);
+    const today = new Date();
+    const slotDateOnly = new Date(date);
+    slotDateOnly.setHours(0, 0, 0, 0);
+    const todayOnly = new Date();
+    todayOnly.setHours(0, 0, 0, 0);
+
+    // Check if date is in the past
+    if (slotDateOnly < todayOnly) {
+      return res.status(400).json({ message: 'Cannot mark past dates as unavailable' });
+    }
+
+    // If date is today, check if the time slot is in the past
+    if (slotDateOnly.getTime() === todayOnly.getTime()) {
+      const [timeStr, period] = timeSlot.split(' ');
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const slotHours = period === 'PM' && hours !== 12 ? hours + 12 : period === 'AM' && hours === 12 ? 0 : hours;
+      
+      slotDate.setHours(slotHours, minutes, 0, 0);
+      
+      if (slotDate <= today) {
+        return res.status(400).json({ message: 'Cannot mark past time slots as unavailable' });
+      }
+    }
+
     let availability = await DoctorAvailability.findOne({ doctorId });
     
     if (!availability) {
@@ -174,21 +207,21 @@ const addUnavailableTimeSlot = async (req, res) => {
       });
     }
 
-    const slotDate = new Date(date);
-    slotDate.setHours(0, 0, 0, 0);
+    const slotDateForCheck = new Date(date);
+    slotDateForCheck.setHours(0, 0, 0, 0);
 
     // Check if slot already exists
     const slotExists = availability.unavailableTimeSlots.some(slot => {
       const sDate = new Date(slot.date);
       sDate.setHours(0, 0, 0, 0);
-      return sDate.getTime() === slotDate.getTime() && slot.timeSlot === timeSlot;
+      return sDate.getTime() === slotDateForCheck.getTime() && slot.timeSlot === timeSlot;
     });
 
     if (slotExists) {
       return res.status(400).json({ message: 'This time slot is already marked as unavailable' });
     }
 
-    availability.unavailableTimeSlots.push({ date: slotDate, timeSlot });
+    availability.unavailableTimeSlots.push({ date: slotDateForCheck, timeSlot });
     await availability.save();
 
     res.status(200).json({

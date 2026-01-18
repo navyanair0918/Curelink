@@ -9,6 +9,7 @@ import MyAppointments from "./components/MyAppointments";
 import DashboardPage from "./pages/DashboardPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import PatientNavbar from "./components/PatientNavbar";
+import DoctorNavbar from "./components/DoctorNavbar";
 import "./App.css";
 
 // Helper function to get user role
@@ -112,28 +113,7 @@ function App() {
                 {getUserRole() === "patient" ? (
                   <PatientNavbar onLogout={handleLogout} />
                 ) : (
-                  <nav className="navbar">
-                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                    </Link>
-                    <div className="nav-links">
-                      <Link to="/appointments">My Appointments</Link>
-                      <button 
-                        onClick={handleLogout}
-                        style={{
-                          background: "rgba(255, 255, 255, 0.2)",
-                          border: "1px solid white",
-                          color: "white",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontWeight: 500
-                        }}
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </nav>
+                  <DoctorNavbar onLogout={handleLogout} />
                 )}
                 <DashboardPage />
               </div>
@@ -148,28 +128,7 @@ function App() {
                 {getUserRole() === "patient" ? (
                   <PatientNavbar onLogout={handleLogout} />
                 ) : (
-                  <nav className="navbar">
-                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                    </Link>
-                    <div className="nav-links">
-                      <Link to="/appointments">My Appointments</Link>
-                      <button 
-                        onClick={handleLogout}
-                        style={{
-                          background: "rgba(255, 255, 255, 0.2)",
-                          border: "1px solid white",
-                          color: "white",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontWeight: 500
-                        }}
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </nav>
+                  <DoctorNavbar onLogout={handleLogout} />
                 )}
                 <BookAppointment />
               </div>
@@ -184,28 +143,7 @@ function App() {
                 {getUserRole() === "patient" ? (
                   <PatientNavbar onLogout={handleLogout} />
                 ) : (
-                  <nav className="navbar">
-                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                    </Link>
-                    <div className="nav-links">
-                      <Link to="/appointments">My Appointments</Link>
-                      <button 
-                        onClick={handleLogout}
-                        style={{
-                          background: "rgba(255, 255, 255, 0.2)",
-                          border: "1px solid white",
-                          color: "white",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontWeight: 500
-                        }}
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </nav>
+                  <DoctorNavbar onLogout={handleLogout} />
                 )}
                 <MyAppointments />
               </div>
