@@ -8,6 +8,7 @@ import BookAppointment from "./components/BookAppointment";
 import MyAppointments from "./components/MyAppointments";
 import DashboardPage from "./pages/DashboardPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import PatientNavbar from "./components/PatientNavbar";
 import "./App.css";
 
 // Helper function to get user role
@@ -108,31 +109,32 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isLoggedIn}>
               <div className="App">
-                <nav className="navbar">
-                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                  </Link>
-                  <div className="nav-links">
-                    {getUserRole() !== "doctor" && (
-                      <Link to="/book">Book Appointment</Link>
-                    )}
-                    <Link to="/appointments">My Appointments</Link>
-                    <button 
-                      onClick={handleLogout}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid white",
-                        color: "white",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: 500
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </nav>
+                {getUserRole() === "patient" ? (
+                  <PatientNavbar onLogout={handleLogout} />
+                ) : (
+                  <nav className="navbar">
+                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                    </Link>
+                    <div className="nav-links">
+                      <Link to="/appointments">My Appointments</Link>
+                      <button 
+                        onClick={handleLogout}
+                        style={{
+                          background: "rgba(255, 255, 255, 0.2)",
+                          border: "1px solid white",
+                          color: "white",
+                          padding: "0.5rem 1rem",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontWeight: 500
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </nav>
+                )}
                 <DashboardPage />
               </div>
             </ProtectedRoute>
@@ -143,31 +145,32 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isLoggedIn}>
               <div className="App">
-                <nav className="navbar">
-                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                  </Link>
-                  <div className="nav-links">
-                    {getUserRole() !== "doctor" && (
-                      <Link to="/book">Book Appointment</Link>
-                    )}
-                    <Link to="/appointments">My Appointments</Link>
-                    <button 
-                      onClick={handleLogout}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid white",
-                        color: "white",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: 500
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </nav>
+                {getUserRole() === "patient" ? (
+                  <PatientNavbar onLogout={handleLogout} />
+                ) : (
+                  <nav className="navbar">
+                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                    </Link>
+                    <div className="nav-links">
+                      <Link to="/appointments">My Appointments</Link>
+                      <button 
+                        onClick={handleLogout}
+                        style={{
+                          background: "rgba(255, 255, 255, 0.2)",
+                          border: "1px solid white",
+                          color: "white",
+                          padding: "0.5rem 1rem",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontWeight: 500
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </nav>
+                )}
                 <BookAppointment />
               </div>
             </ProtectedRoute>
@@ -178,31 +181,32 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isLoggedIn}>
               <div className="App">
-                <nav className="navbar">
-                  <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                    <h1>CureLink - Digital Appointment and Health Record Portal</h1>
-                  </Link>
-                  <div className="nav-links">
-                    {getUserRole() !== "doctor" && (
-                      <Link to="/book">Book Appointment</Link>
-                    )}
-                    <Link to="/appointments">My Appointments</Link>
-                    <button 
-                      onClick={handleLogout}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid white",
-                        color: "white",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: 500
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </nav>
+                {getUserRole() === "patient" ? (
+                  <PatientNavbar onLogout={handleLogout} />
+                ) : (
+                  <nav className="navbar">
+                    <Link to="/dashboard" style={{ textDecoration: "none", color: "white" }}>
+                      <h1>CureLink - Digital Appointment and Health Record Portal</h1>
+                    </Link>
+                    <div className="nav-links">
+                      <Link to="/appointments">My Appointments</Link>
+                      <button 
+                        onClick={handleLogout}
+                        style={{
+                          background: "rgba(255, 255, 255, 0.2)",
+                          border: "1px solid white",
+                          color: "white",
+                          padding: "0.5rem 1rem",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontWeight: 500
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </nav>
+                )}
                 <MyAppointments />
               </div>
             </ProtectedRoute>

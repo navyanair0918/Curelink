@@ -6,6 +6,7 @@ import DoctorDashboard from "../components/DoctorDashboard";
 import DoctorProfileModal from "../components/DoctorProfileModal";
 import PatientRecords from "../components/PatientRecords";
 import DoctorRecordUpdate from "../components/DoctorRecordUpdate";
+import DoctorAvailability from "../components/DoctorAvailability";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -19,6 +20,13 @@ const DashboardPage = () => {
     setUser(userData);
     // Don't show profile modal on login - only on registration
     setLoading(false);
+
+    // Listen for switch to records event from navbar
+    const handleSwitchToRecords = () => {
+      setActiveTab("records");
+    };
+    window.addEventListener('switchToRecords', handleSwitchToRecords);
+    return () => window.removeEventListener('switchToRecords', handleSwitchToRecords);
   }, []);
 
   const handleProfileComplete = (profileData) => {
@@ -60,6 +68,12 @@ const DashboardPage = () => {
               Appointments
             </button>
             <button
+              className={activeTab === "availability" ? "active" : ""}
+              onClick={() => setActiveTab("availability")}
+            >
+              Manage Availability
+            </button>
+            <button
               className={activeTab === "records" ? "active" : ""}
               onClick={() => setActiveTab("records")}
             >
@@ -69,6 +83,7 @@ const DashboardPage = () => {
 
           {/* Tab Content */}
           {activeTab === "appointments" && <DoctorDashboard />}
+          {activeTab === "availability" && <DoctorAvailability />}
           {activeTab === "records" && <DoctorRecordUpdate />}
         </div>
       </div>
@@ -76,18 +91,17 @@ const DashboardPage = () => {
   }
 
   // Show patient dashboard for patients
-  const userId = "USER_ID_FROM_MONGODB";
-  
   return (
     <div className="dashboard-page">
       <div className="dl-container">
         <header className="dl-header">
           <div>
-            <h1>Welcome Back</h1>
+            <h1>Welcome Back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!</h1>
             <p className="muted">Here's your timeline and recent activity</p>
           </div>
           <div className="dl-actions">
             <button className="btn-primary" onClick={() => navigate("/book")}>
+              <span style={{ marginRight: '6px' }}>📅</span>
               New Appointment
             </button>
           </div>
@@ -113,10 +127,10 @@ const DashboardPage = () => {
         {activeTab === "appointments" && (
           <div className="dl-grid">
             <main className="dl-main">
-              <Dashboard userId={userId} />
+              <Dashboard />
             </main>
             <aside className="dl-aside">
-              <Notifications userId={userId} />
+              <Notifications />
             </aside>
           </div>
         )}

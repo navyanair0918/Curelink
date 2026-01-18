@@ -8,6 +8,7 @@ const PatientRecords = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'prescription', 'report'
   const [formData, setFormData] = useState({
     file: null,
     category: 'prescription',
@@ -128,6 +129,24 @@ const PatientRecords = () => {
     return classes[category] || '';
   };
 
+  // Filter records based on active filter
+  const filteredRecords = activeFilter === 'all' 
+    ? records 
+    : records.filter(record => record.category === activeFilter);
+
+  // Count records by category
+  const prescriptionCount = records.filter(r => r.category === 'prescription').length;
+  const reportCount = records.filter(r => r.category === 'report').length;
+
+  // Listen for switch to records event from navbar
+  useEffect(() => {
+    const handleSwitchToRecords = () => {
+      // This will be handled by DashboardPage
+    };
+    window.addEventListener('switchToRecords', handleSwitchToRecords);
+    return () => window.removeEventListener('switchToRecords', handleSwitchToRecords);
+  }, []);
+
   if (loading) {
     return <div className="records-loading">Loading records...</div>;
   }
@@ -135,12 +154,43 @@ const PatientRecords = () => {
   return (
     <div className="patient-records">
       <div className="records-header">
-        <h2>My Medical Records</h2>
+        <div>
+          <h2>My Medical Records</h2>
+          <p className="records-subtitle">Manage your prescriptions and medical reports</p>
+        </div>
         <button 
           className="btn-upload" 
           onClick={() => setShowUploadForm(!showUploadForm)}
         >
           {showUploadForm ? 'Cancel' : '+ Upload Record'}
+        </button>
+      </div>
+
+      {/* Category Tabs */}
+      <div className="records-tabs">
+        <button
+          className={`tab-button ${activeFilter === 'all' ? 'active' : ''}`}
+          onClick={() => setActiveFilter('all')}
+        >
+          <span className="tab-icon">📋</span>
+          All Records
+          <span className="tab-count">({records.length})</span>
+        </button>
+        <button
+          className={`tab-button ${activeFilter === 'prescription' ? 'active' : ''}`}
+          onClick={() => setActiveFilter('prescription')}
+        >
+          <span className="tab-icon">💊</span>
+          Prescriptions
+          <span className="tab-count">({prescriptionCount})</span>
+        </button>
+        <button
+          className={`tab-button ${activeFilter === 'report' ? 'active' : ''}`}
+          onClick={() => setActiveFilter('report')}
+        >
+          <span className="tab-icon">📊</span>
+          Reports
+          <span className="tab-count">({reportCount})</span>
         </button>
       </div>
 
@@ -226,14 +276,22 @@ const PatientRecords = () => {
       )}
 
       <div className="records-list">
-        {records.length === 0 ? (
+        {filteredRecords.length === 0 ? (
           <div className="empty-records">
-            <p>No medical records found. Upload your first record to get started.</p>
+            <p>
+              {records.length === 0 
+                ? 'No medical records found. Upload your first record to get started.'
+                : activeFilter === 'prescription'
+                ? 'No prescriptions found. Upload a prescription to get started.'
+                : activeFilter === 'report'
+                ? 'No reports found. Upload a report to get started.'
+                : 'No records found matching the selected filter.'}
+            </p>
           </div>
         ) : (
           <div className="records-grid">
-            {records.map((record) => (
-              <div key={record._id} className="record-card">
+            {filteredRecords.map((record) => (
+              <div key={record._id} className={`record-card record-card-${record.category}`}>
                 <div className="record-header">
                   <span className={`category-badge ${getCategoryBadgeClass(record.category)}`}>
                     {record.category.charAt(0).toUpperCase() + record.category.slice(1)}

@@ -1,4 +1,5 @@
 const Appointment = require('../models/Appointment');
+const DoctorAvailability = require('../models/DoctorAvailability');
 
 // POST /api/appointments - Patient books appointment
 const bookAppointment = async (req, res) => {
@@ -22,8 +23,44 @@ const bookAppointment = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Check for existing appointment conflict (same doctor, date, and time slot)
     const appointmentDate = new Date(date);
+    const appointmentDay = new Date(appointmentDate);
+    appointmentDay.setHours(0, 0, 0, 0);
+
+    // Check doctor availability
+    const doctorAvailability = await DoctorAvailability.findOne({ doctorId });
+    
+    if (doctorAvailability) {
+      // Check if entire date is unavailable
+      const isDateUnavailable = doctorAvailability.unavailableDates.some(unavailableDate => {
+        const uDate = new Date(unavailableDate);
+        uDate.setHours(0, 0, 0, 0);
+        return uDate.getTime() === appointmentDay.getTime();
+      });
+
+      if (isDateUnavailable) {
+        return res.status(409).json({ 
+          message: 'Doctor is not available on this date. Please choose another date.',
+          conflict: true
+        });
+      }
+
+      // Check if specific time slot is unavailable for this date
+      const isTimeSlotUnavailable = doctorAvailability.unavailableTimeSlots.some(slot => {
+        const slotDate = new Date(slot.date);
+        slotDate.setHours(0, 0, 0, 0);
+        return slotDate.getTime() === appointmentDay.getTime() && slot.timeSlot === timeSlot;
+      });
+
+      if (isTimeSlotUnavailable) {
+        return res.status(409).json({ 
+          message: 'Doctor is not available at this time slot. Please choose another time.',
+          conflict: true
+        });
+      }
+    }
+
+    // Check for existing appointment conflict (same doctor, date, and time slot)
     const existingAppointment = await Appointment.findOne({
       doctorId,
       date: {
