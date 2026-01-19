@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "https://curelink-1ukh.onrender.com/api"
 });
 
 // Add token to requests if available
@@ -54,7 +54,7 @@ export const recordAPI = {
   // Update prescription/diagnosis (doctor only)
   updateRecord: (recordId, data) => API.put(`/records/${recordId}/update`, data),
   // Get file URL
-  getRecordFileUrl: (recordId) => `http://localhost:5000/api/records/${recordId}/file`,
+  getRecordFileUrl: (recordId) => `https://curelink-1ukh.onrender.com/api/records/${recordId}/file`,
   // Delete a record
   deleteRecord: (recordId) => API.delete(`/records/${recordId}`),
 };
