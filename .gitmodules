@@ -1,0 +1,3 @@
+[submodule "frontend/my-app/Curelink"]
+    path = frontend/my-app/Curelink
+    url = https://github.com/navyanair0918/Curelink.git
