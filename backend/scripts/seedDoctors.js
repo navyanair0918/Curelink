@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-// Import User model
 const User = require('../models/User');
 
-// 10 Indian doctors with specializations
 const doctors = [
   {
     name: 'Dr. Rajesh Kumar',
@@ -98,29 +96,26 @@ async function seedDoctors() {
     });
     console.log('MongoDB Connected');
 
-    // Clear existing doctors (optional - comment out if you want to keep existing)
-    // await User.deleteMany({ role: 'doctor' });
-    // console.log('Cleared existing doctors');
+
 
     let created = 0;
     let skipped = 0;
 
-    // Create doctors
-    for (const doctorData of doctors) {
-      try {
-        // Check if doctor already exists
+    for (const doctorData of doctors) 
+      {
+      try 
+      {
         const existingDoctor = await User.findOne({ email: doctorData.email });
-        if (existingDoctor) {
+        if (existingDoctor) 
+        {
           console.log(`Doctor ${doctorData.name} already exists, skipping...`);
           skipped++;
           continue;
         }
 
-        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(doctorData.password, salt);
 
-        // Create doctor
         const doctor = new User({
           ...doctorData,
           password: hashedPassword
@@ -129,22 +124,25 @@ async function seedDoctors() {
         await doctor.save();
         console.log(`✅ Created doctor: ${doctorData.name} - ${doctorData.specialization}`);
         created++;
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         console.error(`Error creating doctor ${doctorData.name}:`, error.message);
       }
     }
 
-    console.log('\n📊 Summary:');
+    console.log('\n Summary:');
     console.log(`Created: ${created} doctors`);
     console.log(`Skipped: ${skipped} doctors (already exist)`);
     console.log(`Total: ${doctors.length} doctors`);
 
     process.exit(0);
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Error seeding doctors:', error);
     process.exit(1);
   }
 }
 
-// Run the seed function
 seedDoctors();

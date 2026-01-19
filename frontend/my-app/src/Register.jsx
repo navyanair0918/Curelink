@@ -40,33 +40,38 @@ function Register({ onSuccess }) {
       return;
     }
 
-    // Validate doctor-specific fields
-    if (role === "doctor") {
-      if (!degree.trim()) {
+    if (role === "doctor") 
+    {
+      if (!degree.trim()) 
+      {
         setMessage("Please enter your qualification/degree");
         setType("error");
         return;
       }
-      if (!specialization.trim()) {
+      if (!specialization.trim()) 
+      {
         setMessage("Please select your specialization");
         setType("error");
         return;
       }
     }
 
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email)) 
+    {
       setMessage("Enter valid Gmail address");
       setType("error");
       return;
     }
 
-    if (!passwordRegex.test(password)) {
+    if (!passwordRegex.test(password)) 
+    {
       setMessage("Password must be at least 8 characters and contain uppercase, lowercase, number, and special character");
       setType("error");
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword) 
+    {
       setMessage("Passwords do not match");
       setType("error");
       return;
@@ -75,8 +80,8 @@ function Register({ onSuccess }) {
     setLoading(true);
     setMessage("");
 
-    try {
-      // Normalize role to lowercase before sending
+    try 
+  {
       const normalizedRole = role.toLowerCase();
       const registerData = { 
         name, 
@@ -85,16 +90,16 @@ function Register({ onSuccess }) {
         role: normalizedRole 
       };
       
-      // Add doctor-specific fields if registering as doctor
-      if (normalizedRole === "doctor") {
+      if (normalizedRole === "doctor") 
+      {
         registerData.degree = degree.trim();
         registerData.specialization = specialization.trim();
       }
       
       const response = await authAPI.register(registerData);
       
-      if (response.data.success) {
-        // Store token and user info
+      if (response.data.success) 
+      {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem("isLoggedIn", "true");
@@ -109,7 +114,9 @@ function Register({ onSuccess }) {
           navigate("/dashboard");
         }, 800);
       }
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       setLoading(false);
       const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
       setMessage(errorMessage);

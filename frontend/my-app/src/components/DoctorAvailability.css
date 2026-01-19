@@ -1,55 +1,65 @@
-.doctor-availability {
+.doctor-availability 
+{
   padding: 20px;
 }
 
-.availability-header {
+.availability-header 
+{
   margin-bottom: 24px;
 }
 
-.availability-header h2 {
+.availability-header h2 
+{
   margin: 0 0 8px 0;
   color: #2c3e50;
   font-size: 24px;
 }
 
-.availability-header p {
+.availability-header p 
+{
   margin: 0;
   color: #6b7280;
   font-size: 14px;
 }
 
-.availability-loading {
+.availability-loading 
+{
   text-align: center;
   padding: 40px;
   color: #666;
 }
 
-.availability-message {
+.availability-message 
+{
   padding: 12px 16px;
   border-radius: 6px;
   margin-bottom: 20px;
 }
 
-.availability-message.success {
+.availability-message.success 
+{
   background-color: #d4edda;
   color: #155724;
   border: 1px solid #c3e6cb;
 }
 
-.availability-message.error {
+.availability-message.error 
+{
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
 
-.action-type-tabs {
+.action-type-tabs 
+{
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
   border-bottom: 2px solid #e5e7eb;
 }
 
-.action-type-tabs button {
+.action-type-tabs button 
+{
   background: none;
   border: none;
   padding: 12px 20px;
@@ -62,18 +72,21 @@
   transition: all 0.2s;
 }
 
-.action-type-tabs button:hover {
+.action-type-tabs button:hover 
+{
   color: #3498db;
   background: rgba(52, 152, 219, 0.05);
 }
 
-.action-type-tabs button.active {
+.action-type-tabs button.active 
+{
   color: #3498db;
   border-bottom-color: #3498db;
   background: rgba(52, 152, 219, 0.08);
 }
 
-.add-unavailable-form {
+.add-unavailable-form 
+{
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -81,7 +94,8 @@
   margin-bottom: 24px;
 }
 
-.add-unavailable-form label {
+.add-unavailable-form label 
+{
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
@@ -89,7 +103,8 @@
 }
 
 .add-unavailable-form input[type="date"],
-.add-unavailable-form select {
+.add-unavailable-form select 
+{
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -99,13 +114,15 @@
 }
 
 .add-unavailable-form input[type="date"]:focus,
-.add-unavailable-form select:focus {
+.add-unavailable-form select:focus 
+{
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.btn-add-unavailable {
+.btn-add-unavailable 
+{
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -118,12 +135,14 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.btn-add-unavailable:hover {
+.btn-add-unavailable:hover 
+{
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
-.unavailable-section {
+.unavailable-section 
+{
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -131,19 +150,22 @@
   margin-bottom: 20px;
 }
 
-.unavailable-section h3 {
+.unavailable-section h3 
+{
   margin: 0 0 16px 0;
   color: #2c3e50;
   font-size: 18px;
 }
 
-.unavailable-list {
+.unavailable-list 
+{
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.unavailable-item {
+.unavailable-item 
+{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -153,12 +175,14 @@
   border-left: 3px solid #ef4444;
 }
 
-.unavailable-item span {
+.unavailable-item span 
+{
   color: #2c3e50;
   font-weight: 500;
 }
 
-.btn-remove {
+.btn-remove 
+{
   background: #ef4444;
   color: white;
   border: none;
@@ -170,11 +194,13 @@
   transition: background 0.2s;
 }
 
-.btn-remove:hover {
+.btn-remove:hover 
+{
   background: #dc2626;
 }
 
-.no-unavailable {
+.no-unavailable 
+{
   text-align: center;
   padding: 40px;
   background: white;
@@ -183,18 +209,22 @@
   color: #6b7280;
 }
 
-@media (max-width: 768px) {
-  .action-type-tabs {
+@media (max-width: 768px) 
+{
+  .action-type-tabs 
+  {
     flex-direction: column;
   }
 
-  .unavailable-item {
+  .unavailable-item 
+  {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
 
-  .btn-remove {
+  .btn-remove 
+  {
     width: 100%;
   }
 }

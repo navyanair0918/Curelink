@@ -9,7 +9,6 @@ const {
 } = require('../controllers/availabilityController');
 const auth = require('../middleware/auth');
 
-// All routes require authentication and doctor role
 router.get('/', auth, getAvailability);
 router.post('/unavailable-date', auth, addUnavailableDate);
 router.delete('/unavailable-date', auth, removeUnavailableDate);

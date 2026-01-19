@@ -18,10 +18,8 @@ const DashboardPage = () => {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(userData);
-    // Don't show profile modal on login - only on registration
     setLoading(false);
 
-    // Listen for switch to records event from navbar
     const handleSwitchToRecords = () => {
       setActiveTab("records");
     };
@@ -30,19 +28,19 @@ const DashboardPage = () => {
   }, []);
 
   const handleProfileComplete = (profileData) => {
-    // Update user in localStorage
     const updatedUser = { ...user, ...profileData };
     localStorage.setItem("user", JSON.stringify(updatedUser));
     setUser(updatedUser);
     setShowProfileModal(false);
   };
 
-  if (loading) {
+  if (loading) 
+  {
     return <div style={{ padding: "2rem", textAlign: "center" }}>Loading...</div>;
   }
 
-  // Show doctor dashboard for doctors
-  if (user?.role === "doctor") {
+  if (user?.role === "doctor") 
+    {
     return (
       <div className="dashboard-page">
         {showProfileModal && (
@@ -90,7 +88,6 @@ const DashboardPage = () => {
     );
   }
 
-  // Show patient dashboard for patients
   return (
     <div className="dashboard-page">
       <div className="dl-container">

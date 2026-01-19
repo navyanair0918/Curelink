@@ -1,6 +1,6 @@
 # CureLink Backend API Documentation
 
-## 🚀 How to See Backend Details
+## How to See Backend Details
 
 ### 1. **Console Logs (Terminal/Command Prompt)**
 When you run the backend server, you'll see logs in your terminal:
@@ -39,11 +39,11 @@ curl -X POST http://localhost:5000/api/auth/register \
 
 ---
 
-## 📋 Available API Endpoints
+## Available API Endpoints
 
 ### **Base URL:** `http://localhost:5000/api`
 
-### 🔐 Authentication Routes (`/api/auth`)
+### Authentication Routes (`/api/auth`)
 
 #### 1. Register User
 - **Method:** `POST`
@@ -172,7 +172,7 @@ All appointment routes require authentication (JWT token in header).
 
 ---
 
-## 📁 Backend File Structure
+## Backend File Structure
 
 ```
 backend/
@@ -212,7 +212,7 @@ Expected response:
 ### 2. **Check MongoDB Connection**
 Look at your terminal/console when starting the server:
 - ✅ `MongoDB Connected` = Success
-- ❌ `MongoDB Connection Error: ...` = Failed
+- `MongoDB Connection Error: ...` = Failed
 
 ### 3. **View Database Data**
 Use MongoDB Compass or MongoDB Shell:
@@ -244,7 +244,7 @@ PORT=5000
 
 ---
 
-## 📝 Testing with Postman/Thunder Client
+## Testing with Postman/Thunder Client
 
 ### Example: Register a User
 
@@ -307,7 +307,7 @@ app.use((req, res, next) => {
 
 ---
 
-## 📊 Database Schema
+## Database Schema
 
 ### User Collection
 - `name` (String, required)

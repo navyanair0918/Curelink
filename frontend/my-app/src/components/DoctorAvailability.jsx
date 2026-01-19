@@ -8,10 +8,10 @@ const DoctorAvailability = () => {
   const [message, setMessage] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
-  const [actionType, setActionType] = useState('date'); // 'date' or 'slot'
+  const [actionType, setActionType] = useState('date'); 
 
-  // Available time slots
-  const allTimeSlots = [
+  const allTimeSlots = 
+  [
     '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
     '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
     '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM',
@@ -23,45 +23,54 @@ const DoctorAvailability = () => {
   }, []);
 
   const fetchAvailability = async () => {
-    try {
+    try 
+    {
       setLoading(true);
       const response = await API.get('/availability');
       setAvailability(response.data.availability);
       setMessage('');
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error fetching availability';
       setMessage(errorMsg);
       console.error('Error:', error.response?.data || error);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
 
   const addUnavailableDate = async () => {
-    if (!selectedDate) {
+    if (!selectedDate) 
+    {
       setMessage('Please select a date');
       return;
     }
 
-    // Validate that the selected date is not in the past
     const selectedDateTime = new Date(selectedDate);
     selectedDateTime.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    if (selectedDateTime < today) {
+    if (selectedDateTime < today) 
+    {
       setMessage('Cannot mark past dates as unavailable');
       return;
     }
 
-    try {
+    try 
+    {
       setMessage('');
       await API.post('/availability/unavailable-date', { date: selectedDate });
       setMessage('Date marked as unavailable successfully');
       setSelectedDate('');
       await fetchAvailability();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error marking date as unavailable';
       setMessage(errorMsg);
       setTimeout(() => setMessage(''), 5000);
@@ -69,13 +78,16 @@ const DoctorAvailability = () => {
   };
 
   const removeUnavailableDate = async (dateToRemove) => {
-    try {
+    try 
+    {
       setMessage('');
       await API.delete('/availability/unavailable-date', { data: { date: dateToRemove } });
       setMessage('Date removed from unavailable dates');
       await fetchAvailability();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error removing date';
       setMessage(errorMsg);
       setTimeout(() => setMessage(''), 5000);
@@ -83,41 +95,43 @@ const DoctorAvailability = () => {
   };
 
   const addUnavailableTimeSlot = async () => {
-    if (!selectedDate || !selectedTimeSlot) {
+    if (!selectedDate || !selectedTimeSlot) 
+    {
       setMessage('Please select both date and time slot');
       return;
     }
 
-    // Validate that the selected date and time are not in the past
     const selectedDateTime = new Date(selectedDate);
     const today = new Date();
 
-    // Check if date is in the past
     const selectedDateOnly = new Date(selectedDate);
     selectedDateOnly.setHours(0, 0, 0, 0);
     const todayOnly = new Date();
     todayOnly.setHours(0, 0, 0, 0);
 
-    if (selectedDateOnly < todayOnly) {
+    if (selectedDateOnly < todayOnly) 
+    {
       setMessage('Cannot mark past dates as unavailable');
       return;
     }
 
-    // If date is today, check if the time slot is in the past
-    if (selectedDateOnly.getTime() === todayOnly.getTime()) {
+    if (selectedDateOnly.getTime() === todayOnly.getTime()) 
+      {
       const [timeStr, period] = selectedTimeSlot.split(' ');
       const [hours, minutes] = timeStr.split(':').map(Number);
       const slotHours = period === 'PM' && hours !== 12 ? hours + 12 : period === 'AM' && hours === 12 ? 0 : hours;
       
       selectedDateTime.setHours(slotHours, minutes, 0, 0);
       
-      if (selectedDateTime <= today) {
+      if (selectedDateTime <= today) 
+      {
         setMessage('Cannot mark past time slots as unavailable');
         return;
       }
     }
 
-    try {
+    try 
+    {
       setMessage('');
       await API.post('/availability/unavailable-slot', { 
         date: selectedDate, 
@@ -128,7 +142,9 @@ const DoctorAvailability = () => {
       setSelectedTimeSlot('');
       await fetchAvailability();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error marking time slot as unavailable';
       setMessage(errorMsg);
       setTimeout(() => setMessage(''), 5000);
@@ -136,7 +152,8 @@ const DoctorAvailability = () => {
   };
 
   const removeUnavailableTimeSlot = async (dateToRemove, timeSlotToRemove) => {
-    try {
+    try 
+    {
       setMessage('');
       await API.delete('/availability/unavailable-slot', { 
         data: { date: dateToRemove, timeSlot: timeSlotToRemove } 
@@ -144,7 +161,9 @@ const DoctorAvailability = () => {
       setMessage('Time slot removed from unavailable slots');
       await fetchAvailability();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error removing time slot';
       setMessage(errorMsg);
       setTimeout(() => setMessage(''), 5000);
@@ -163,7 +182,8 @@ const DoctorAvailability = () => {
 
   const today = new Date().toISOString().split('T')[0];
 
-  if (loading) {
+  if (loading) 
+  {
     return <div className="availability-loading">Loading availability...</div>;
   }
 

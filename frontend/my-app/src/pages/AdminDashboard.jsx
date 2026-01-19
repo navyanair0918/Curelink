@@ -14,20 +14,24 @@ function AdminDashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Load all data on initial mount
     const loadInitialData = async () => {
       setLoading(true);
-      try {
+      try 
+      {
         await Promise.all([
           fetchDashboardStats(),
           fetchAllUsers(),
           fetchPatients(),
           fetchDoctors()
         ]);
-      } catch (err) {
+      } 
+      catch (err) 
+      {
         setError("Failed to load dashboard data");
         console.error(err);
-      } finally {
+      } 
+      finally 
+      {
         setLoading(false);
       }
     };
@@ -35,32 +39,40 @@ function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if (activeTab === "appointments") {
+    if (activeTab === "appointments") 
+    {
       fetchAppointments();
     }
   }, [activeTab]);
 
   const fetchDashboardStats = async () => {
-    try {
+    try 
+    {
       const response = await adminAPI.getDashboardStats();
-      if (response.data.success) {
+      if (response.data.success) 
+      {
         setStats(response.data.stats);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error("Error fetching stats:", err);
       setError(prev => prev || "Failed to load statistics");
     }
   };
 
   const fetchAllUsers = async () => {
-    try {
+    try 
+    {
       const response = await adminAPI.getAllUsers();
       if (response.data.success) {
         setUsers(response.data);
         setPatients(response.data.patients?.data || []);
         setDoctors(response.data.doctors?.data || []);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error("Error fetching all users:", err);
       const errorMsg = err.response?.data?.message || "Failed to load users";
       setError(prev => prev || errorMsg);
@@ -70,12 +82,14 @@ function AdminDashboard() {
   const fetchPatients = async () => {
     try {
       const response = await adminAPI.getAllPatients();
-      if (response.data.success) {
-        // API returns { success: true, count: X, patients: [...] }
+      if (response.data.success) 
+      {
         const patientsData = response.data.patients || [];
         setPatients(Array.isArray(patientsData) ? patientsData : []);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error("Error fetching patients:", err);
       const errorMsg = err.response?.data?.message || "Failed to load patients";
       setError(prev => prev || errorMsg);
@@ -83,14 +97,17 @@ function AdminDashboard() {
   };
 
   const fetchDoctors = async () => {
-    try {
+    try 
+    {
       const response = await adminAPI.getAllDoctors();
-      if (response.data.success) {
-        // API returns { success: true, count: X, doctors: [...] }
+      if (response.data.success) 
+      {
         const doctorsData = response.data.doctors || [];
         setDoctors(Array.isArray(doctorsData) ? doctorsData : []);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error("Error fetching doctors:", err);
       const errorMsg = err.response?.data?.message || "Failed to load doctors";
       setError(prev => prev || errorMsg);
@@ -98,18 +115,23 @@ function AdminDashboard() {
   };
 
   const fetchAppointments = async () => {
-    try {
+    try 
+    {
       const response = await adminAPI.getAllAppointments();
-      if (response.data.success) {
+      if (response.data.success) 
+      {
         setAppointments(response.data.appointments);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError("Failed to load appointments");
       console.error(err);
     }
   };
 
-  if (loading) {
+  if (loading) 
+  {
     return (
       <div className="admin-dashboard">
         <div className="loading">Loading dashboard data...</div>
@@ -358,7 +380,7 @@ function AdminDashboard() {
                   <div key={appointment._id} className="appointment-card">
                     <div className="appointment-info">
                       <h4>
-                        {appointment.patientId?.name || "Unknown"} →{" "}
+                        {appointment.patientId?.name || "Unknown"} -
                         {appointment.doctorId?.name || "Unknown"}
                       </h4>
                       <p>

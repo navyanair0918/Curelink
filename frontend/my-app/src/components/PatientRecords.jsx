@@ -24,23 +24,29 @@ const PatientRecords = () => {
   }, []);
 
   const fetchRecords = async () => {
-    try {
+    try 
+    {
       setLoading(true);
       const response = await recordAPI.getMyRecords();
       setRecords(response.data.records || []);
       setError('');
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to fetch records');
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Check file size (10MB limit)
-      if (file.size > 10 * 1024 * 1024) {
+    if (file) 
+    {
+      if (file.size > 10 * 1024 * 1024) 
+      {
         setError('File size must be less than 10MB');
         return;
       }
@@ -52,17 +58,20 @@ const PatientRecords = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.file) {
+    if (!formData.file) 
+    {
       setError('Please select a file');
       return;
     }
 
-    if (!formData.title.trim()) {
+    if (!formData.title.trim()) 
+    {
       setError('Please enter a title');
       return;
     }
 
-    try {
+    try 
+  {
       setUploading(true);
       setError('');
       setSuccess('');
@@ -84,23 +93,31 @@ const PatientRecords = () => {
       });
       setShowUploadForm(false);
       fetchRecords();
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to upload record');
-    } finally {
+    } 
+    finally 
+    {
       setUploading(false);
     }
   };
 
   const handleDelete = async (recordId) => {
-    if (!window.confirm('Are you sure you want to delete this record?')) {
+    if (!window.confirm('Are you sure you want to delete this record?')) 
+    {
       return;
     }
 
-    try {
+    try 
+    {
       await recordAPI.deleteRecord(recordId);
       setSuccess('Record deleted successfully!');
       fetchRecords();
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to delete record');
     }
   };
@@ -129,25 +146,22 @@ const PatientRecords = () => {
     return classes[category] || '';
   };
 
-  // Filter records based on active filter
   const filteredRecords = activeFilter === 'all' 
     ? records 
     : records.filter(record => record.category === activeFilter);
 
-  // Count records by category
   const prescriptionCount = records.filter(r => r.category === 'prescription').length;
   const reportCount = records.filter(r => r.category === 'report').length;
 
-  // Listen for switch to records event from navbar
   useEffect(() => {
     const handleSwitchToRecords = () => {
-      // This will be handled by DashboardPage
     };
     window.addEventListener('switchToRecords', handleSwitchToRecords);
     return () => window.removeEventListener('switchToRecords', handleSwitchToRecords);
   }, []);
 
-  if (loading) {
+  if (loading) 
+  {
     return <div className="records-loading">Loading records...</div>;
   }
 
@@ -172,7 +186,6 @@ const PatientRecords = () => {
           className={`tab-button ${activeFilter === 'all' ? 'active' : ''}`}
           onClick={() => setActiveFilter('all')}
         >
-          <span className="tab-icon">📋</span>
           All Records
           <span className="tab-count">({records.length})</span>
         </button>
@@ -180,7 +193,6 @@ const PatientRecords = () => {
           className={`tab-button ${activeFilter === 'prescription' ? 'active' : ''}`}
           onClick={() => setActiveFilter('prescription')}
         >
-          <span className="tab-icon">💊</span>
           Prescriptions
           <span className="tab-count">({prescriptionCount})</span>
         </button>
@@ -188,7 +200,6 @@ const PatientRecords = () => {
           className={`tab-button ${activeFilter === 'report' ? 'active' : ''}`}
           onClick={() => setActiveFilter('report')}
         >
-          <span className="tab-icon">📊</span>
           Reports
           <span className="tab-count">({reportCount})</span>
         </button>

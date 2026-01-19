@@ -1,25 +1,24 @@
 const Appointment = require('../models/Appointment');
 const DoctorAvailability = require('../models/DoctorAvailability');
 
-// POST /api/appointments - Patient books appointment
 const bookAppointment = async (req, res) => {
-  try {
+  try 
+  {
     const { doctorId, date, timeSlot } = req.body;
     
-    // Get user ID from JWT - handle different payload structures
     const patientId = req.user?.id || req.user?.userId || req.user?._id;
     
     if (!patientId) {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    // Check if user is a patient (only patients can book appointments)
-    if (req.user?.role !== 'patient') {
+    if (req.user?.role !== 'patient') 
+    {
       return res.status(403).json({ message: 'Only patients can book appointments' });
     }
 
-    // Validate required fields
-    if (!doctorId || !date || !timeSlot) {
+    if (!doctorId || !date || !timeSlot) 
+    {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -27,32 +26,32 @@ const bookAppointment = async (req, res) => {
     const appointmentDay = new Date(appointmentDate);
     appointmentDay.setHours(0, 0, 0, 0);
 
-    // Check doctor availability
     const doctorAvailability = await DoctorAvailability.findOne({ doctorId });
     
-    if (doctorAvailability) {
-      // Check if entire date is unavailable
+    if (doctorAvailability) 
+    {
       const isDateUnavailable = doctorAvailability.unavailableDates.some(unavailableDate => {
         const uDate = new Date(unavailableDate);
         uDate.setHours(0, 0, 0, 0);
         return uDate.getTime() === appointmentDay.getTime();
       });
 
-      if (isDateUnavailable) {
+      if (isDateUnavailable) 
+      {
         return res.status(409).json({ 
           message: 'Doctor is not available on this date. Please choose another date.',
           conflict: true
         });
       }
 
-      // Check if specific time slot is unavailable for this date
       const isTimeSlotUnavailable = doctorAvailability.unavailableTimeSlots.some(slot => {
         const slotDate = new Date(slot.date);
         slotDate.setHours(0, 0, 0, 0);
         return slotDate.getTime() === appointmentDay.getTime() && slot.timeSlot === timeSlot;
       });
 
-      if (isTimeSlotUnavailable) {
+      if (isTimeSlotUnavailable) 
+      {
         return res.status(409).json({ 
           message: 'Doctor is not available at this time slot. Please choose another time.',
           conflict: true
@@ -60,7 +59,6 @@ const bookAppointment = async (req, res) => {
       }
     }
 
-    // Check for existing appointment conflict (same doctor, date, and time slot)
     const existingAppointment = await Appointment.findOne({
       doctorId,
       date: {
@@ -71,14 +69,14 @@ const bookAppointment = async (req, res) => {
       status: { $in: ['Pending', 'Confirmed'] } // Only check active appointments
     });
 
-    if (existingAppointment) {
+    if (existingAppointment) 
+    {
       return res.status(409).json({ 
         message: 'This time slot is already booked. Please choose another time slot.',
         conflict: true
       });
     }
 
-    // Create new appointment
     const appointment = new Appointment({
       patientId,
       doctorId,
@@ -100,75 +98,78 @@ const bookAppointment = async (req, res) => {
   }
 };
 
-// GET /api/appointments/patient - Patient views their appointments
 const getPatientAppointments = async (req, res) => {
-  try {
-    // Get user ID from JWT - handle different payload structures
+  try 
+  {
     const patientId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!patientId) {
+    if (!patientId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
     const appointments = await Appointment.find({ patientId })
       .populate('doctorId', 'name email')
-      .sort({ date: -1 }); // Sort by date, newest first
-
+      .sort({ date: -1 }); 
     res.status(200).json({ appointments });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     res.status(500).json({ message: 'Error fetching appointments', error: error.message });
   }
 };
 
-// GET /api/appointments/doctor - Doctor views their appointments
 const getDoctorAppointments = async (req, res) => {
-  try {
-    // Get user ID from JWT - handle different payload structures
+  try 
+  {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
     const appointments = await Appointment.find({ doctorId })
       .populate('patientId', 'name email')
-      .sort({ date: -1 }); // Sort by date, newest first
+      .sort({ date: -1 }); 
 
     res.status(200).json({ appointments });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     res.status(500).json({ message: 'Error fetching appointments', error: error.message });
   }
 };
 
-// PUT /api/appointments/:id - Doctor updates appointment status
 const updateAppointmentStatus = async (req, res) => {
-  try {
+  try 
+  {
     const { id } = req.params;
     const { status } = req.body;
     
-    // Get user ID from JWT - handle different payload structures
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    // Validate status
-    if (!['Pending', 'Confirmed', 'Completed'].includes(status)) {
+    if (!['Pending', 'Confirmed', 'Completed'].includes(status)) 
+    {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
-    // Find appointment and verify doctor owns it
     const appointment = await Appointment.findById(id);
-    if (!appointment) {
+    if (!appointment) 
+    {
       return res.status(404).json({ message: 'Appointment not found' });
     }
 
-    if (appointment.doctorId.toString() !== doctorId) {
+    if (appointment.doctorId.toString() !== doctorId) 
+    {
       return res.status(403).json({ message: 'Not authorized to update this appointment' });
     }
 
-    // Update status
     appointment.status = status;
     await appointment.save();
     await appointment.populate('patientId', 'name email');
@@ -178,12 +179,15 @@ const updateAppointmentStatus = async (req, res) => {
       message: 'Appointment status updated',
       appointment
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     res.status(500).json({ message: 'Error updating appointment', error: error.message });
   }
 };
 
-module.exports = {
+module.exports = 
+{
   bookAppointment,
   getPatientAppointments,
   getDoctorAppointments,

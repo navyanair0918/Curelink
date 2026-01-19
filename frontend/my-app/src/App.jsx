@@ -12,38 +12,42 @@ import PatientNavbar from "./components/PatientNavbar";
 import DoctorNavbar from "./components/DoctorNavbar";
 import "./App.css";
 
-// Helper function to get user role
 const getUserRole = () => {
-  try {
+  try 
+  {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     return user.role || null;
-  } catch {
+  } 
+  catch 
+  {
     return null;
   }
 };
 
-// Protected Route Component
-function ProtectedRoute({ children, isAuthenticated, requireAdmin = false }) {
-  if (!isAuthenticated) {
+function ProtectedRoute({ children, isAuthenticated, requireAdmin = false }) 
+{
+  if (!isAuthenticated) 
+  {
     return <Navigate to="/login" replace />;
   }
   
-  // Check if trying to access admin route
   const isAdminRoute = window.location.pathname.startsWith('/admin');
   const userRole = getUserRole();
   const currentPath = window.location.pathname;
   
-  // If accessing admin route, check if user is admin
-  if (isAdminRoute || requireAdmin) {
-    if (userRole !== "admin") {
+  if (isAdminRoute || requireAdmin) 
+  {
+    if (userRole !== "admin") 
+    {
       return <Navigate to="/dashboard" replace />;
     }
   }
   
-  // If admin tries to access patient/doctor routes, redirect to admin dashboard
-  if (userRole === "admin" && !isAdminRoute) {
+  if (userRole === "admin" && !isAdminRoute) 
+  {
     const patientRoutes = ["/dashboard", "/book", "/appointments"];
-    if (patientRoutes.includes(currentPath)) {
+    if (patientRoutes.includes(currentPath)) 
+    {
       return <Navigate to="/admin/dashboard" replace />;
     }
   }
@@ -53,11 +57,9 @@ function ProtectedRoute({ children, isAuthenticated, requireAdmin = false }) {
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Check if user was previously logged in
     return localStorage.getItem("isLoggedIn") === "true";
   });
 
-  // Called when login/register is successful
   const handleAuthSuccess = () => {
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "true");

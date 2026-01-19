@@ -1,8 +1,8 @@
 const User = require('../models/User');
 
-// GET /api/users/doctors - Get all doctors for appointment booking
 const getAllDoctors = async (req, res) => {
-  try {
+  try 
+  {
     const doctors = await User.find({ role: 'doctor' })
       .select('-password')
       .sort({ name: 1 });
@@ -12,7 +12,9 @@ const getAllDoctors = async (req, res) => {
       count: doctors.length,
       doctors
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get all doctors error:', error);
     res.status(500).json({
       success: false,
@@ -22,21 +24,22 @@ const getAllDoctors = async (req, res) => {
   }
 };
 
-// PUT /api/users/profile - Update user profile (for doctors to add degree/specialization)
 const updateProfile = async (req, res) => {
-  try {
+  try 
+  {
     const userId = req.user?.id || req.user?.userId || req.user?._id;
     const { degree, specialization } = req.body;
 
-    if (!userId) {
+    if (!userId) 
+    {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    // Only doctors can update degree and specialization
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({
         success: false,
         message: 'Only doctors can update qualifications'
@@ -53,7 +56,8 @@ const updateProfile = async (req, res) => {
       { new: true, runValidators: true }
     ).select('-password');
 
-    if (!user) {
+    if (!user) 
+    {
       return res.status(404).json({
         success: false,
         message: 'User not found'
@@ -65,7 +69,9 @@ const updateProfile = async (req, res) => {
       message: 'Profile updated successfully',
       user
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Update profile error:', error);
     res.status(500).json({
       success: false,

@@ -1,4 +1,5 @@
-.book-appointment {
+.book-appointment 
+{
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -7,31 +8,36 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.book-appointment h2 {
+.book-appointment h2 
+{
   color: #333;
   margin-bottom: 20px;
   text-align: center;
 }
 
-.appointment-form {
+.appointment-form 
+{
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.form-group {
+.form-group 
+{
   display: flex;
   flex-direction: column;
 }
 
-.form-group label {
+.form-group label 
+{
   margin-bottom: 8px;
   font-weight: 600;
   color: #555;
 }
 
 .form-group select,
-.form-group input[type="date"] {
+.form-group input[type="date"] 
+{
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -39,13 +45,15 @@
 }
 
 .form-group select:focus,
-.form-group input[type="date"]:focus {
+.form-group input[type="date"]:focus 
+{
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.submit-btn {
+.submit-btn 
+{
   padding: 12px 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -58,35 +66,41 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.submit-btn:hover:not(:disabled) {
+.submit-btn:hover:not(:disabled) 
+{
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
-.submit-btn:disabled {
+.submit-btn:disabled 
+{
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-.message {
+.message 
+{
   padding: 10px;
   border-radius: 4px;
   text-align: center;
 }
 
-.message.success {
+.message.success 
+{
   background-color: #d4edda;
   color: #155724;
   border: 1px solid #c3e6cb;
 }
 
-.message.error {
+.message.error 
+{
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
 
-.time-slot-message {
+.time-slot-message 
+{
   padding: 12px;
   background-color: #fff3cd;
   color: #856404;
@@ -96,11 +110,13 @@
   font-size: 14px;
 }
 
-.time-slot-message p {
+.time-slot-message p 
+{
   margin: 0;
 }
 
-.time-slot-hint {
+.time-slot-hint 
+{
   margin-top: 6px;
   font-size: 12px;
   color: #6b7280;

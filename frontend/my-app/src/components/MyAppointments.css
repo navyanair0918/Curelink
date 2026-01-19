@@ -1,21 +1,25 @@
-.my-appointments {
+.my-appointments 
+{
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
 }
 
-.my-appointments h2 {
+.my-appointments h2 
+{
   color: #333;
   margin-bottom: 20px;
 }
 
-.loading {
+.loading 
+{
   text-align: center;
   padding: 40px;
   color: #666;
 }
 
-.error-message {
+.error-message 
+{
   padding: 10px;
   background-color: #f8d7da;
   color: #721c24;
@@ -23,7 +27,8 @@
   margin-bottom: 20px;
 }
 
-.no-appointments {
+.no-appointments 
+{
   text-align: center;
   padding: 40px;
   color: #666;
@@ -31,12 +36,14 @@
   border-radius: 8px;
 }
 
-.appointments-list {
+.appointments-list 
+{
   display: grid;
   gap: 20px;
 }
 
-.appointment-card {
+.appointment-card 
+{
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -44,7 +51,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.appointment-header {
+.appointment-header 
+{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,38 +61,45 @@
   border-bottom: 1px solid #eee;
 }
 
-.appointment-header h3 {
+.appointment-header h3 
+{
   margin: 0;
   color: #333;
 }
 
-.status-badge {
+.status-badge 
+{
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
 }
 
-.status-pending {
+.status-pending 
+{
   background-color: #fff3cd;
   color: #856404;
 }
 
-.status-confirmed {
+.status-confirmed 
+{
   background-color: #d1ecf1;
   color: #0c5460;
 }
 
-.status-completed {
+.status-completed 
+{
   background-color: #d4edda;
   color: #155724;
 }
 
-.appointment-details p {
+.appointment-details p 
+{
   margin: 8px 0;
   color: #555;
 }
 
-.appointment-details strong {
+.appointment-details strong 
+{
   color: #333;
 }

@@ -55,7 +55,7 @@ function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="feature-icon">📅</div>
+            <div className="feature-icon"></div>
             <h3>Easy Appointments</h3>
             <p>Book and manage your medical appointments with ease</p>
           </motion.div>
@@ -65,7 +65,7 @@ function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <div className="feature-icon">📋</div>
+            <div className="feature-icon"></div>
             <h3>Health Records</h3>
             <p>Access and manage your digital health records securely</p>
           </motion.div>
@@ -75,7 +75,7 @@ function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <div className="feature-icon">🔒</div>
+            <div className="feature-icon"></div>
             <h3>Secure & Private</h3>
             <p>Your health data is protected with industry-standard security</p>
           </motion.div>

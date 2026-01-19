@@ -1,22 +1,23 @@
 const DoctorAvailability = require('../models/DoctorAvailability');
 
-// GET /api/availability - Get doctor's availability
 const getAvailability = async (req, res) => {
   try {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({ message: 'Only doctors can access availability' });
     }
 
     let availability = await DoctorAvailability.findOne({ doctorId });
     
-    // If no availability record exists, create one with empty arrays
-    if (!availability) {
+    if (!availability) 
+    {
       availability = new DoctorAvailability({
         doctorId,
         unavailableDates: [],
@@ -30,7 +31,9 @@ const getAvailability = async (req, res) => {
       success: true,
       availability
     });
-  } catch (error) {
+  } 
+catch (error) 
+{
     res.status(500).json({ 
       message: 'Error fetching availability', 
       error: error.message 
@@ -38,37 +41,41 @@ const getAvailability = async (req, res) => {
   }
 };
 
-// POST /api/availability/unavailable-date - Add unavailable date
 const addUnavailableDate = async (req, res) => {
-  try {
+  try 
+  {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     const { date } = req.body;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({ message: 'Only doctors can manage availability' });
     }
 
-    if (!date) {
+    if (!date) 
+    {
       return res.status(400).json({ message: 'Date is required' });
     }
 
-    // Validate that the date is not in the past
     const unavailableDate = new Date(date);
     unavailableDate.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    if (unavailableDate < today) {
+    if (unavailableDate < today) 
+    {
       return res.status(400).json({ message: 'Cannot mark past dates as unavailable' });
     }
 
     let availability = await DoctorAvailability.findOne({ doctorId });
     
-    if (!availability) {
+    if (!availability) 
+    {
       availability = new DoctorAvailability({
         doctorId,
         unavailableDates: [],
@@ -77,14 +84,14 @@ const addUnavailableDate = async (req, res) => {
       });
     }
 
-    // Check if date already exists
     const dateExists = availability.unavailableDates.some(d => {
       const dDate = new Date(d);
       dDate.setHours(0, 0, 0, 0);
       return dDate.getTime() === unavailableDate.getTime();
     });
 
-    if (dateExists) {
+    if (dateExists) 
+    {
       return res.status(400).json({ message: 'This date is already marked as unavailable' });
     }
 
@@ -104,7 +111,6 @@ const addUnavailableDate = async (req, res) => {
   }
 };
 
-// DELETE /api/availability/unavailable-date - Remove unavailable date
 const removeUnavailableDate = async (req, res) => {
   try {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
@@ -152,25 +158,27 @@ const removeUnavailableDate = async (req, res) => {
   }
 };
 
-// POST /api/availability/unavailable-slot - Add unavailable time slot
 const addUnavailableTimeSlot = async (req, res) => {
-  try {
+  try 
+  {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     const { date, timeSlot } = req.body;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({ message: 'Only doctors can manage availability' });
     }
 
-    if (!date || !timeSlot) {
+    if (!date || !timeSlot) 
+    {
       return res.status(400).json({ message: 'Date and time slot are required' });
     }
 
-    // Validate that the date and time are not in the past
     const slotDate = new Date(date);
     const today = new Date();
     const slotDateOnly = new Date(date);
@@ -178,27 +186,29 @@ const addUnavailableTimeSlot = async (req, res) => {
     const todayOnly = new Date();
     todayOnly.setHours(0, 0, 0, 0);
 
-    // Check if date is in the past
-    if (slotDateOnly < todayOnly) {
+    if (slotDateOnly < todayOnly) 
+    {
       return res.status(400).json({ message: 'Cannot mark past dates as unavailable' });
     }
 
-    // If date is today, check if the time slot is in the past
-    if (slotDateOnly.getTime() === todayOnly.getTime()) {
+    if (slotDateOnly.getTime() === todayOnly.getTime()) 
+    {
       const [timeStr, period] = timeSlot.split(' ');
       const [hours, minutes] = timeStr.split(':').map(Number);
       const slotHours = period === 'PM' && hours !== 12 ? hours + 12 : period === 'AM' && hours === 12 ? 0 : hours;
       
       slotDate.setHours(slotHours, minutes, 0, 0);
       
-      if (slotDate <= today) {
+      if (slotDate <= today) 
+      {
         return res.status(400).json({ message: 'Cannot mark past time slots as unavailable' });
       }
     }
 
     let availability = await DoctorAvailability.findOne({ doctorId });
     
-    if (!availability) {
+    if (!availability) 
+    {
       availability = new DoctorAvailability({
         doctorId,
         unavailableDates: [],
@@ -210,14 +220,14 @@ const addUnavailableTimeSlot = async (req, res) => {
     const slotDateForCheck = new Date(date);
     slotDateForCheck.setHours(0, 0, 0, 0);
 
-    // Check if slot already exists
     const slotExists = availability.unavailableTimeSlots.some(slot => {
       const sDate = new Date(slot.date);
       sDate.setHours(0, 0, 0, 0);
       return sDate.getTime() === slotDateForCheck.getTime() && slot.timeSlot === timeSlot;
     });
 
-    if (slotExists) {
+    if (slotExists)
+    {
       return res.status(400).json({ message: 'This time slot is already marked as unavailable' });
     }
 
@@ -229,7 +239,9 @@ const addUnavailableTimeSlot = async (req, res) => {
       message: 'Time slot marked as unavailable',
       availability
     });
-  } catch (error) {
+  } 
+catch (error) 
+{
     res.status(500).json({ 
       message: 'Error adding unavailable time slot', 
       error: error.message 
@@ -237,27 +249,31 @@ const addUnavailableTimeSlot = async (req, res) => {
   }
 };
 
-// DELETE /api/availability/unavailable-slot - Remove unavailable time slot
 const removeUnavailableTimeSlot = async (req, res) => {
-  try {
+  try 
+{
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     const { date, timeSlot } = req.body;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({ message: 'Only doctors can manage availability' });
     }
 
-    if (!date || !timeSlot) {
+    if (!date || !timeSlot) 
+    {
       return res.status(400).json({ message: 'Date and time slot are required' });
     }
 
     const availability = await DoctorAvailability.findOne({ doctorId });
     
-    if (!availability) {
+    if (!availability) 
+    {
       return res.status(404).json({ message: 'Availability record not found' });
     }
 
@@ -277,7 +293,9 @@ const removeUnavailableTimeSlot = async (req, res) => {
       message: 'Time slot removed from unavailable slots',
       availability
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     res.status(500).json({ 
       message: 'Error removing unavailable time slot', 
       error: error.message 

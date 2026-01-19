@@ -30,33 +30,41 @@ const DoctorProfileModal = ({ onComplete, doctorInfo }) => {
     e.preventDefault();
     setError('');
 
-    if (!degree.trim()) {
+    if (!degree.trim()) 
+    {
       setError('Please enter your qualification/degree');
       return;
     }
 
-    if (!specialization.trim()) {
+    if (!specialization.trim()) 
+    {
       setError('Please select your specialization');
       return;
     }
 
     setLoading(true);
-    try {
+    try 
+    {
       const response = await userAPI.updateProfile({
         degree: degree.trim(),
         specialization: specialization.trim()
       });
 
-      if (response.data.success) {
+      if (response.data.success) 
+      {
         onComplete({
           degree: degree.trim(),
           specialization: specialization.trim()
         });
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       const errorMsg = err.response?.data?.message || 'Error updating profile';
       setError(errorMsg);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };

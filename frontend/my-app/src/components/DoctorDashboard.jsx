@@ -14,31 +14,40 @@ const DoctorDashboard = () => {
   }, []);
 
   const fetchAppointments = async () => {
-    try {
+    try 
+    {
       const response = await API.get('/appointments/doctor');
       setAppointments(response.data.appointments || []);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error fetching appointments';
       setMessage(errorMsg);
       console.error('Error:', error.response?.data || error);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
 
   const updateAppointmentStatus = async (appointmentId, newStatus) => {
     setUpdatingId(appointmentId);
-    try {
+    try 
+    {
       const response = await API.put(`/appointments/${appointmentId}`, { status: newStatus });
       setMessage('Appointment status updated successfully');
-      // Refresh appointments
       await fetchAppointments();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMsg = error.response?.data?.message || 'Error updating appointment status';
       setMessage(errorMsg);
       setTimeout(() => setMessage(''), 5000);
-    } finally {
+    } 
+    finally 
+    {
       setUpdatingId(null);
       setSelectedStatus(null);
     }
@@ -54,7 +63,8 @@ const DoctorDashboard = () => {
   };
 
   const getStatusClass = (status) => {
-    switch (status) {
+    switch (status) 
+    {
       case 'Confirmed':
         return 'status-confirmed';
       case 'Completed':
@@ -65,7 +75,8 @@ const DoctorDashboard = () => {
   };
 
   const getStatusColor = (status) => {
-    switch (status) {
+    switch (status) 
+    {
       case 'Confirmed':
         return '#10b981';
       case 'Completed':
@@ -75,7 +86,6 @@ const DoctorDashboard = () => {
     }
   };
 
-  // Filter appointments by status
   const filteredAppointments = selectedStatus
     ? appointments.filter(apt => apt.status === selectedStatus)
     : appointments;

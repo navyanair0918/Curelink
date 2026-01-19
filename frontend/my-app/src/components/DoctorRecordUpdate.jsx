@@ -29,13 +29,15 @@ const DoctorRecordUpdate = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    
-    if (!patientUsername.trim()) {
+
+    if (!patientUsername.trim()) 
+    {
       setError('Please enter patient email/username');
       return;
     }
 
-    try {
+    try 
+    {
       setLoading(true);
       setError('');
       setSuccess('');
@@ -47,11 +49,15 @@ const DoctorRecordUpdate = () => {
       setRecords(response.data.records || []);
       setPatient(response.data.patient);
       setSuccess(`Found ${response.data.count} record(s) for ${response.data.patient.name}`);
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to fetch patient records');
       setRecords([]);
       setPatient(null);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
@@ -72,7 +78,8 @@ const DoctorRecordUpdate = () => {
   };
 
   const handleUpdate = async (recordId) => {
-    try {
+    try 
+    {
       setLoading(true);
       setError('');
       setSuccess('');
@@ -82,24 +89,29 @@ const DoctorRecordUpdate = () => {
       setSuccess('Record updated successfully!');
       setEditingRecord(null);
       setUpdateData({ prescription: '', diagnosis: '' });
-      
-      // Refresh records
-      if (patientUsername.trim()) {
+
+      if (patientUsername.trim()) 
+      {
         const response = await recordAPI.getPatientRecordsByUsername(patientUsername.trim());
         setRecords(response.data.records || []);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to update record');
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Check file size (10MB limit)
-      if (file.size > 10 * 1024 * 1024) {
+    if (file) 
+      {
+      if (file.size > 10 * 1024 * 1024) 
+      {
         setError('File size must be less than 10MB');
         return;
       }
@@ -111,22 +123,26 @@ const DoctorRecordUpdate = () => {
   const handleUpload = async (e) => {
     e.preventDefault();
     
-    if (!patient) {
+    if (!patient) 
+    {
       setError('Please search for a patient first');
       return;
     }
 
-    if (!uploadFormData.file) {
+    if (!uploadFormData.file) 
+    {
       setError('Please select a file');
       return;
     }
 
-    if (!uploadFormData.title.trim()) {
+    if (!uploadFormData.title.trim()) 
+    {
       setError('Please enter a title');
       return;
     }
 
-    try {
+    try 
+    {
       setUploading(true);
       setError('');
       setSuccess('');
@@ -153,15 +169,19 @@ const DoctorRecordUpdate = () => {
       });
       setShowUploadForm(false);
       
-      // Refresh records
-      if (patientUsername.trim()) {
+      if (patientUsername.trim()) 
+      {
         const response = await recordAPI.getPatientRecordsByUsername(patientUsername.trim());
         setRecords(response.data.records || []);
         setSuccess(`Record uploaded successfully! Found ${response.data.count} record(s) for ${response.data.patient.name}`);
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       setError(err.response?.data?.message || 'Failed to upload record');
-    } finally {
+    } 
+    finally 
+    {
       setUploading(false);
     }
   };
@@ -183,7 +203,8 @@ const DoctorRecordUpdate = () => {
   };
 
   const getCategoryBadgeClass = (category) => {
-    const classes = {
+    const classes = 
+    {
       prescription: 'badge-prescription',
       report: 'badge-report'
     };

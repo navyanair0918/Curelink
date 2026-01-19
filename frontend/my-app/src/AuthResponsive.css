@@ -1,6 +1,4 @@
-/* Responsive styles for auth pages */
 @media (max-width: 768px) {
-  /* Make auth card stack vertically on mobile */
   [style*="width: 900px"],
   [style*="maxWidth: 900px"] {
     flex-direction: column !important;
@@ -19,9 +17,7 @@
   }
 }
 
-/* Dark mode support for auth pages */
 @media (prefers-color-scheme: dark) {
-  /* Right section text visibility in dark mode */
   [style*="background: linear-gradient(135deg, #e9f1fb"] {
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.7)) !important;
   }

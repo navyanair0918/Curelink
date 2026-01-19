@@ -16,15 +16,20 @@ const MyAppointments = () => {
 
   
   const fetchAppointments = async (role) => {
-    try {
+    try 
+    {
       const endpoint = role === 'doctor' ? '/appointments/doctor' : '/appointments/patient';
       const response = await API.get(endpoint);
       setAppointments(response.data.appointments || []);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMessage = error.response?.data?.message || 'Error fetching appointments';
       setMessage(errorMessage);
       console.error('Error:', error.response?.data || error);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
@@ -41,7 +46,8 @@ const MyAppointments = () => {
 
   
   const getStatusClass = (status) => {
-    switch (status) {
+    switch (status) 
+    {
       case 'Confirmed':
         return 'status-confirmed';
       case 'Completed':
@@ -51,7 +57,8 @@ const MyAppointments = () => {
     }
   };
 
-  if (loading) {
+  if (loading) 
+  {
     return <div className="loading">Loading appointments...</div>;
   }
 

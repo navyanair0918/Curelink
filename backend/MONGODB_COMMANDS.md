@@ -1,6 +1,6 @@
 # MongoDB Shell Commands Guide
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. **Open MongoDB Shell**
 ```bash
@@ -14,7 +14,7 @@ mongosh mongodb://localhost:27017/curelink
 
 ---
 
-## 📊 Basic Database Commands
+## Basic Database Commands
 
 ### **Show All Databases**
 ```javascript
@@ -38,7 +38,7 @@ show collections
 
 ---
 
-## 👥 User Collection Commands
+## User Collection Commands
 
 ### **View All Users**
 ```javascript
@@ -354,7 +354,7 @@ db.appointments.dataSize()
 
 ---
 
-## 🔐 Useful Queries for Your App
+## Useful Queries for Your App
 
 ### **Find All Patients**
 ```javascript
@@ -417,7 +417,7 @@ db.users.aggregate([
 
 ---
 
-## ⚠️ Important Notes
+## Important Notes
 
 1. **Always use `.pretty()`** for readable output
 2. **Be careful with delete commands** - they're permanent!

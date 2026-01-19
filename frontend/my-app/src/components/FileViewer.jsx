@@ -8,11 +8,11 @@ const FileViewer = ({ recordId, fileName, fileType, onClose }) => {
 
   useEffect(() => {
     const fetchFile = async () => {
-      try {
+      try 
+      {
         setLoading(true);
         setError('');
         
-        // Fetch file as blob with authentication
         const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:5000/api/records/${recordId}/file`, {
           headers: {
@@ -20,26 +20,31 @@ const FileViewer = ({ recordId, fileName, fileType, onClose }) => {
           }
         });
 
-        if (!response.ok) {
+        if (!response.ok) 
+        {
           throw new Error('Failed to load file');
         }
 
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         setFileUrl(url);
-      } catch (err) {
+      } 
+      catch (err) 
+      {
         setError('Failed to load file. Please try again.');
         console.error('File fetch error:', err);
-      } finally {
+      } 
+      finally 
+      {
         setLoading(false);
       }
     };
 
     fetchFile();
 
-    // Cleanup: revoke object URL when component unmounts
     return () => {
-      if (fileUrl) {
+      if (fileUrl) 
+      {
         URL.revokeObjectURL(fileUrl);
       }
     };
@@ -48,7 +53,8 @@ const FileViewer = ({ recordId, fileName, fileType, onClose }) => {
   const isImage = fileType && fileType.startsWith('image/');
   const isPDF = fileType && fileType === 'application/pdf';
 
-  if (loading) {
+  if (loading) 
+  {
     return (
       <div className="file-viewer-overlay" onClick={onClose}>
         <div className="file-viewer-container" onClick={(e) => e.stopPropagation()}>
@@ -58,7 +64,8 @@ const FileViewer = ({ recordId, fileName, fileType, onClose }) => {
     );
   }
 
-  if (error) {
+  if (error) 
+  {
     return (
       <div className="file-viewer-overlay" onClick={onClose}>
         <div className="file-viewer-container" onClick={(e) => e.stopPropagation()}>

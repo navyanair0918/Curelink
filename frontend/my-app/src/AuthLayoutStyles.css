@@ -1,6 +1,4 @@
-/* Responsive styles for auth pages */
 @media (max-width: 768px) {
-  /* Make card stack vertically on mobile */
   .auth-card-container {
     flex-direction: column !important;
   }
@@ -11,7 +9,6 @@
   }
 }
 
-/* Dark mode support for auth pages */
 @media (prefers-color-scheme: dark) {
   .auth-right-section h3 {
     color: rgba(255, 255, 255, 0.95) !important;

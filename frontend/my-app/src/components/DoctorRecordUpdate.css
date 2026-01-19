@@ -1,36 +1,43 @@
-.doctor-record-update {
+.doctor-record-update 
+{
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.doctor-record-header {
+.doctor-record-header 
+{
   margin-bottom: 30px;
 }
 
-.doctor-record-header h2 {
+.doctor-record-header h2 
+{
   margin: 0 0 8px 0;
   color: #2c3e50;
   font-size: 28px;
 }
 
-.doctor-record-header p {
+.doctor-record-header p 
+{
   margin: 0;
   color: #666;
   font-size: 14px;
 }
 
-.search-form {
+.search-form 
+{
   margin-bottom: 24px;
 }
 
-.search-input-group {
+.search-input-group 
+{
   display: flex;
   gap: 12px;
   max-width: 600px;
 }
 
-.search-input {
+.search-input 
+{
   flex: 1;
   padding: 12px 16px;
   border: 2px solid #ddd;
@@ -39,12 +46,14 @@
   transition: border-color 0.3s;
 }
 
-.search-input:focus {
+.search-input:focus 
+{
   outline: none;
   border-color: #3498db;
 }
 
-.btn-search {
+.btn-search 
+{
   background: #3498db;
   color: white;
   border: none;
@@ -57,34 +66,40 @@
   white-space: nowrap;
 }
 
-.btn-search:hover:not(:disabled) {
+.btn-search:hover:not(:disabled) 
+{
   background: #2980b9;
 }
 
-.btn-search:disabled {
+.btn-search:disabled 
+{
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.alert {
+.alert 
+{
   padding: 12px 16px;
   border-radius: 6px;
   margin-bottom: 20px;
 }
 
-.alert-error {
+.alert-error 
+{
   background: #fee;
   color: #c33;
   border: 1px solid #fcc;
 }
 
-.alert-success {
+.alert-success 
+{
   background: #efe;
   color: #3c3;
   border: 1px solid #cfc;
 }
 
-.patient-info {
+.patient-info 
+{
   background: white;
   border-radius: 8px;
   padding: 20px;
@@ -92,26 +107,30 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.patient-info-header {
+.patient-info-header 
+{
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
 }
 
-.patient-info h3 {
+.patient-info h3 
+{
   margin: 0 0 12px 0;
   color: #2c3e50;
   font-size: 20px;
 }
 
-.patient-info p {
+.patient-info p 
+{
   margin: 8px 0;
   color: #555;
   font-size: 14px;
 }
 
-.btn-upload-record {
+.btn-upload-record 
+{
   background: #27ae60;
   color: white;
   border: none;
@@ -124,11 +143,13 @@
   white-space: nowrap;
 }
 
-.btn-upload-record:hover {
+.btn-upload-record:hover 
+{
   background: #229954;
 }
 
-.upload-form-container {
+.upload-form-container 
+{
   background: white;
   border-radius: 8px;
   padding: 24px;
@@ -136,17 +157,20 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.upload-form h3 {
+.upload-form h3 
+{
   margin-top: 0;
   margin-bottom: 20px;
   color: #2c3e50;
 }
 
-.form-group {
+.form-group 
+{
   margin-bottom: 20px;
 }
 
-.form-group label {
+.form-group label 
+{
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
@@ -156,7 +180,8 @@
 .form-group input[type="text"],
 .form-group input[type="file"],
 .form-group select,
-.form-group textarea {
+.form-group textarea 
+{
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -165,11 +190,13 @@
   font-family: inherit;
 }
 
-.form-group textarea {
+.form-group textarea 
+{
   resize: vertical;
 }
 
-.file-info {
+.file-info 
+{
   margin-top: 8px;
   padding: 8px;
   background: #f5f5f5;
@@ -178,13 +205,15 @@
   color: #666;
 }
 
-.form-actions {
+.form-actions 
+{
   display: flex;
   gap: 12px;
   margin-top: 24px;
 }
 
-.btn-primary {
+.btn-primary 
+{
   background: #3498db;
   color: white;
   border: none;
@@ -196,16 +225,19 @@
   transition: background 0.3s;
 }
 
-.btn-primary:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) 
+{
   background: #2980b9;
 }
 
-.btn-primary:disabled {
+.btn-primary:disabled 
+{
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-secondary {
+.btn-secondary 
+{
   background: #95a5a6;
   color: white;
   border: none;
@@ -217,11 +249,13 @@
   transition: background 0.3s;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover 
+{
   background: #7f8c8d;
 }
 
-.doctor-upload-badge {
+.doctor-upload-badge 
+{
   background: #e8f5e9;
   color: #2e7d32;
   padding: 6px 12px;
@@ -232,12 +266,14 @@
   display: inline-block;
 }
 
-.doctor-specialization {
+.doctor-specialization 
+{
   color: #1b5e20;
   font-weight: 400;
 }
 
-.patient-upload-badge {
+.patient-upload-badge 
+{
   background: #e3f2fd;
   color: #1565c0;
   padding: 6px 12px;
@@ -248,23 +284,27 @@
   display: inline-block;
 }
 
-.records-section {
+.records-section 
+{
   margin-top: 24px;
 }
 
-.records-section h3 {
+.records-section h3 
+{
   margin: 0 0 20px 0;
   color: #2c3e50;
   font-size: 22px;
 }
 
-.records-list {
+.records-list 
+{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
 }
 
-.record-card {
+.record-card 
+{
   background: white;
   border-radius: 8px;
   padding: 20px;
@@ -272,19 +312,22 @@
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.record-card:hover {
+.record-card:hover 
+{
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.record-header {
+.record-header 
+{
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.category-badge {
+.category-badge 
+{
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 12px;
@@ -292,35 +335,41 @@
   text-transform: uppercase;
 }
 
-.badge-prescription {
+.badge-prescription 
+{
   background: #e8f5e9;
   color: #2e7d32;
 }
 
-.badge-report {
+.badge-report 
+{
   background: #e3f2fd;
   color: #1565c0;
 }
 
-.badge-diagnosis {
+.badge-diagnosis 
+{
   background: #fff3e0;
   color: #e65100;
 }
 
-.record-title {
+.record-title 
+{
   margin: 0 0 12px 0;
   color: #2c3e50;
   font-size: 18px;
 }
 
-.record-description {
+.record-description 
+{
   color: #666;
   font-size: 14px;
   margin-bottom: 12px;
   line-height: 1.5;
 }
 
-.record-update {
+.record-update 
+{
   background: #f8f9fa;
   padding: 12px;
   border-radius: 6px;
@@ -328,26 +377,30 @@
   border-left: 3px solid #3498db;
 }
 
-.record-update strong {
+.record-update strong 
+{
   display: block;
   margin-bottom: 6px;
   color: #2c3e50;
   font-size: 14px;
 }
 
-.record-update p {
+.record-update p 
+{
   margin: 0 0 6px 0;
   color: #555;
   font-size: 14px;
   line-height: 1.5;
 }
 
-.record-update small {
+.record-update small 
+{
   color: #999;
   font-size: 12px;
 }
 
-.no-updates {
+.no-updates 
+{
   background: #fff9e6;
   padding: 12px;
   border-radius: 6px;
@@ -355,23 +408,27 @@
   border-left: 3px solid #ffc107;
 }
 
-.no-updates p {
+.no-updates p 
+{
   margin: 0;
   color: #856404;
   font-size: 14px;
 }
 
-.record-footer {
+.record-footer 
+{
   border-top: 1px solid #eee;
   padding-top: 12px;
   margin-bottom: 16px;
 }
 
-.record-file {
+.record-file 
+{
   margin-bottom: 8px;
 }
 
-.file-link {
+.file-link 
+{
   background: none;
   border: none;
   color: #3498db;
@@ -385,23 +442,27 @@
   font-family: inherit;
 }
 
-.file-link:hover {
+.file-link:hover 
+{
   color: #2980b9;
   text-decoration: underline;
 }
 
-.file-size {
+.file-size 
+{
   color: #999;
   font-size: 12px;
 }
 
-.record-date {
+.record-date 
+{
   color: #999;
   font-size: 12px;
   margin-top: 4px;
 }
 
-.btn-edit {
+.btn-edit 
+{
   width: 100%;
   background: #27ae60;
   color: white;
@@ -415,21 +476,25 @@
   margin-top: 12px;
 }
 
-.btn-edit:hover {
+.btn-edit:hover 
+{
   background: #229954;
 }
 
-.edit-form {
+.edit-form 
+{
   margin-top: 16px;
   padding-top: 16px;
   border-top: 2px solid #eee;
 }
 
-.form-group {
+.form-group 
+{
   margin-bottom: 16px;
 }
 
-.form-group label {
+.form-group label 
+{
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
@@ -437,7 +502,8 @@
   font-size: 14px;
 }
 
-.form-textarea {
+.form-textarea 
+{
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -447,17 +513,20 @@
   resize: vertical;
 }
 
-.form-textarea:focus {
+.form-textarea:focus 
+{
   outline: none;
   border-color: #3498db;
 }
 
-.form-actions {
+.form-actions 
+{
   display: flex;
   gap: 12px;
 }
 
-.btn-save {
+.btn-save 
+{
   flex: 1;
   background: #27ae60;
   color: white;
@@ -470,16 +539,19 @@
   transition: background 0.3s;
 }
 
-.btn-save:hover:not(:disabled) {
+.btn-save:hover:not(:disabled) 
+{
   background: #229954;
 }
 
-.btn-save:disabled {
+.btn-save:disabled 
+{
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-cancel {
+.btn-cancel 
+{
   flex: 1;
   background: #95a5a6;
   color: white;
@@ -492,16 +564,19 @@
   transition: background 0.3s;
 }
 
-.btn-cancel:hover:not(:disabled) {
+.btn-cancel:hover:not(:disabled) 
+{
   background: #7f8c8d;
 }
 
-.btn-cancel:disabled {
+.btn-cancel:disabled 
+{
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.empty-records {
+.empty-records 
+{
   text-align: center;
   padding: 60px 20px;
   color: #999;
@@ -510,20 +585,25 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-@media (max-width: 768px) {
-  .search-input-group {
+@media (max-width: 768px) 
+{
+  .search-input-group 
+  {
     flex-direction: column;
   }
 
-  .btn-search {
+  .btn-search 
+  {
     width: 100%;
   }
 
-  .records-list {
+  .records-list 
+  {
     grid-template-columns: 1fr;
   }
 
-  .form-actions {
+  .form-actions 
+  {
     flex-direction: column;
   }
 }

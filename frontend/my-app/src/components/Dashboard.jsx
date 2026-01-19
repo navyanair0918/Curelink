@@ -8,18 +8,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAppointments();
-    // Refresh appointments every minute
+    // To refresh appointments every minute
     const interval = setInterval(fetchAppointments, 60000);
     return () => clearInterval(interval);
   }, []);
 
   const fetchAppointments = async () => {
-    try {
+    try 
+    {
       setLoading(true);
       const response = await API.get('/appointments/patient');
       const fetchedAppointments = response.data.appointments || [];
       
-      // Format appointments for display
       const formattedAppointments = fetchedAppointments.map(app => ({
         ...app,
         formattedDate: formatDate(app.date),
@@ -28,10 +28,14 @@ const Dashboard = () => {
       }));
       
       setAppointments(formattedAppointments);
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error('Error fetching appointments:', err);
       setAppointments([]);
-    } finally {
+    } 
+    finally 
+    {
       setLoading(false);
     }
   };
@@ -46,7 +50,8 @@ const Dashboard = () => {
     });
   };
 
-  if (loading) {
+  if (loading) 
+  {
     return (
       <section className="dashboard">
         <div className="dashboard-head">

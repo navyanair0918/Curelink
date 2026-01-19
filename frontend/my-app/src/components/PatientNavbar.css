@@ -1,4 +1,5 @@
-.patient-navbar {
+.patient-navbar 
+{
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 1rem 2rem;
@@ -11,12 +12,14 @@
   z-index: 1000;
 }
 
-.navbar-brand {
+.navbar-brand 
+{
   display: flex;
   align-items: center;
 }
 
-.brand-link {
+.brand-link 
+{
   display: flex;
   align-items: center;
   gap: 10px;
@@ -25,21 +28,25 @@
   transition: transform 0.2s;
 }
 
-.brand-link:hover {
+.brand-link:hover 
+{
   transform: scale(1.05);
 }
 
-.brand-icon {
+.brand-icon 
+{
   font-size: 1.8rem;
 }
 
-.navbar-brand h1 {
+.navbar-brand h1 
+{
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-.navbar-menu {
+.navbar-menu 
+{
   display: flex;
   gap: 0.5rem;
   align-items: center;
@@ -47,7 +54,8 @@
   justify-content: center;
 }
 
-.nav-link {
+.nav-link 
+{
   display: flex;
   align-items: center;
   gap: 6px;
@@ -62,33 +70,39 @@
   font-size: 0.95rem;
 }
 
-.nav-link:hover {
+.nav-link:hover 
+{
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
 
-.nav-link.active {
+.nav-link.active 
+{
   background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.nav-link.nav-button {
+.nav-link.nav-button 
+{
   cursor: pointer;
   font-family: inherit;
   border: 1px solid transparent;
 }
 
-.nav-icon {
+.nav-icon 
+{
   font-size: 1.1rem;
 }
 
-.navbar-actions {
+.navbar-actions 
+{
   display: flex;
   align-items: center;
 }
 
-.btn-logout {
+.btn-logout 
+{
   display: flex;
   align-items: center;
   gap: 6px;
@@ -104,55 +118,66 @@
   font-family: inherit;
 }
 
-.btn-logout:hover {
+.btn-logout:hover 
+{
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.logout-icon {
+.logout-icon 
+{
   font-size: 1.1rem;
 }
 
-/* Mobile Responsive */
-@media (max-width: 968px) {
-  .patient-navbar {
+@media (max-width: 968px) 
+{
+  .patient-navbar 
+  {
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
   }
 
-  .navbar-menu {
+  .navbar-menu 
+  {
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
   }
 
-  .nav-link {
+  .nav-link 
+  {
     padding: 0.5rem 0.8rem;
     font-size: 0.85rem;
   }
 
-  .navbar-brand h1 {
+  .navbar-brand h1 
+  {
     font-size: 1.3rem;
   }
 }
 
-@media (max-width: 640px) {
-  .navbar-menu {
+@media (max-width: 640px) 
+{
+  .navbar-menu 
+  {
     gap: 0.3rem;
   }
 
-  .nav-link {
+  .nav-link 
+  {
     padding: 0.5rem 0.7rem;
     font-size: 0.8rem;
   }
 
-  .nav-icon {
+  .nav-icon 
+  {
     display: none;
   }
 
-  .navbar-brand h1 {
+  .navbar-brand h1 
+  {
     font-size: 1.2rem;
   }
 }

@@ -22,13 +22,15 @@ function Login({ onSuccess }) {
   const handleLogin = async () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
-    if (!email || !password) {
+    if (!email || !password) 
+    {
       setMessage("All fields are required");
       setType("error");
       return;
     }
 
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email)) 
+    {
       setMessage("Enter a valid Gmail address");
       setType("error");
       return;
@@ -37,13 +39,13 @@ function Login({ onSuccess }) {
     setLoading(true);
     setMessage("");
 
-    try {
-      // Normalize role to lowercase before sending
+    try 
+    {
       const normalizedRole = role.toLowerCase();
       const response = await authAPI.login({ email, password, role: normalizedRole });
       
-      if (response.data.success) {
-        // Store token and user info
+      if (response.data.success) 
+      {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem("isLoggedIn", "true");
@@ -52,18 +54,23 @@ function Login({ onSuccess }) {
         setType("success");
 
         setTimeout(() => {
-          if (onSuccess) {
+          if (onSuccess) 
+          {
             onSuccess();
           }
-          // Redirect based on role
-          if (response.data.user.role === "admin") {
+          if (response.data.user.role === "admin") 
+          {
             navigate("/admin/dashboard");
-          } else {
+          } 
+          else 
+          {
             navigate("/dashboard");
           }
         }, 800);
       }
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       setLoading(false);
       const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
       setMessage(errorMessage);

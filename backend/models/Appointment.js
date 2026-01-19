@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Appointment Schema
 const appointmentSchema = new mongoose.Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +25,7 @@ const appointmentSchema = new mongoose.Schema({
     default: 'Pending'
   }
 }, {
-  timestamps: true // Adds createdAt and updatedAt fields
+  timestamps: true 
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

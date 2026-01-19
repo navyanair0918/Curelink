@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Patient Record Schema
 const patientRecordSchema = new mongoose.Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -11,7 +10,7 @@ const patientRecordSchema = new mongoose.Schema({
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    default: null // null if uploaded by patient
+    default: null 
   },
   category: {
     type: String,
@@ -28,7 +27,6 @@ const patientRecordSchema = new mongoose.Schema({
     trim: true,
     default: ''
   },
-  // File information
   fileName: {
     type: String,
     required: true
@@ -45,7 +43,6 @@ const patientRecordSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // Doctor's prescription/diagnosis update
   prescription: {
     type: String,
     trim: true,
@@ -56,7 +53,6 @@ const patientRecordSchema = new mongoose.Schema({
     trim: true,
     default: ''
   },
-  // Track who created and last updated
   createdBy: {
     type: String,
     enum: ['patient', 'doctor'],
@@ -68,10 +64,9 @@ const patientRecordSchema = new mongoose.Schema({
     default: null
   }
 }, {
-  timestamps: true // Adds createdAt and updatedAt fields
+  timestamps: true 
 });
 
-// Index for efficient queries
 patientRecordSchema.index({ patientId: 1, createdAt: -1 });
 patientRecordSchema.index({ doctorId: 1 });
 

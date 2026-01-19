@@ -3,19 +3,21 @@ const User = require('../models/User');
 const path = require('path');
 const fs = require('fs');
 
-// POST /api/records/upload - Upload a patient record (patient or doctor)
 const uploadRecord = async (req, res) => {
-  try {
+  try
+  {
     const userId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!userId) {
+    if (!userId) 
+    {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    if (!req.file) {
+    if (!req.file) 
+    {
       return res.status(400).json({
         success: false,
         message: 'No file uploaded'
@@ -25,22 +27,23 @@ const uploadRecord = async (req, res) => {
     const { category, title, description, prescription, diagnosis, patientEmail } = req.body;
     let patientId = userId;
 
-    // If doctor is uploading, they must provide patient email
-    if (req.user?.role === 'doctor') {
-      if (!patientEmail || patientEmail.trim() === '') {
+    if (req.user?.role === 'doctor') 
+    {
+      if (!patientEmail || patientEmail.trim() === '') 
+      {
         return res.status(400).json({
           success: false,
           message: 'Patient email is required when uploading as a doctor'
         });
       }
 
-      // Find patient by email
       const patient = await User.findOne({ 
         email: patientEmail.toLowerCase().trim(),
         role: 'patient'
       });
 
-      if (!patient) {
+      if (!patient) 
+      {
         return res.status(404).json({
           success: false,
           message: 'Patient not found with the provided email'
@@ -48,21 +51,25 @@ const uploadRecord = async (req, res) => {
       }
 
       patientId = patient._id;
-    } else if (req.user?.role !== 'patient') {
+    } 
+    else if (req.user?.role !== 'patient') 
+    {
       return res.status(403).json({
         success: false,
         message: 'Only patients and doctors can upload records'
       });
     }
 
-    if (!category || !['prescription', 'report'].includes(category)) {
+    if (!category || !['prescription', 'report'].includes(category)) 
+    {
       return res.status(400).json({
         success: false,
         message: 'Valid category is required (prescription or report)'
       });
     }
 
-    if (!title || title.trim() === '') {
+    if (!title || title.trim() === '')
+  {
       return res.status(400).json({
         success: false,
         message: 'Title is required'
@@ -81,8 +88,8 @@ const uploadRecord = async (req, res) => {
       createdBy: req.user?.role === 'doctor' ? 'doctor' : 'patient'
     };
 
-    // If doctor is uploading, include doctor ID and prescription/diagnosis
-    if (req.user?.role === 'doctor') {
+    if (req.user?.role === 'doctor') 
+    {
       recordData.doctorId = userId;
       recordData.lastUpdatedBy = userId;
       if (prescription) recordData.prescription = prescription.trim();
@@ -92,7 +99,6 @@ const uploadRecord = async (req, res) => {
     const record = new PatientRecord(recordData);
     await record.save();
 
-    // Populate doctor info for response
     const populatedRecord = await PatientRecord.findById(record._id)
       .populate('doctorId', 'name email specialization')
       .populate('patientId', 'name email');
@@ -105,8 +111,8 @@ const uploadRecord = async (req, res) => {
   } catch (error) {
     console.error('Upload record error:', error);
     
-    // Delete uploaded file if record creation failed
-    if (req.file && fs.existsSync(req.file.path)) {
+    if (req.file && fs.existsSync(req.file.path)) 
+    {
       fs.unlinkSync(req.file.path);
     }
 
@@ -118,20 +124,21 @@ const uploadRecord = async (req, res) => {
   }
 };
 
-// GET /api/records/my-records - Get all records for logged-in patient
 const getMyRecords = async (req, res) => {
-  try {
+  try 
+{
     const userId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!userId) {
+    if (!userId) 
+    {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    // Only patients can view their own records
-    if (req.user?.role !== 'patient') {
+    if (req.user?.role !== 'patient')
+    {
       return res.status(403).json({
         success: false,
         message: 'Only patients can view their own records'
@@ -148,7 +155,9 @@ const getMyRecords = async (req, res) => {
       count: records.length,
       records
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get my records error:', error);
     res.status(500).json({
       success: false,
@@ -158,20 +167,21 @@ const getMyRecords = async (req, res) => {
   }
 };
 
-// GET /api/records/patient/:username - Get patient records by username (doctor only)
 const getPatientRecordsByUsername = async (req, res) => {
-  try {
+  try 
+  {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!doctorId) {
+    if (!doctorId) 
+    {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    // Only doctors can access this
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({
         success: false,
         message: 'Only doctors can access patient records'
@@ -180,13 +190,13 @@ const getPatientRecordsByUsername = async (req, res) => {
 
     const { username } = req.params;
     
-    // Find patient by email (username)
     const patient = await User.findOne({ 
       email: username.toLowerCase(),
       role: 'patient'
     });
 
-    if (!patient) {
+    if (!patient) 
+    {
       return res.status(404).json({
         success: false,
         message: 'Patient not found'
@@ -208,7 +218,9 @@ const getPatientRecordsByUsername = async (req, res) => {
       count: records.length,
       records
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get patient records error:', error);
     res.status(500).json({
       success: false,
@@ -218,20 +230,21 @@ const getPatientRecordsByUsername = async (req, res) => {
   }
 };
 
-// PUT /api/records/:recordId/update - Update prescription/diagnosis (doctor only)
 const updateRecord = async (req, res) => {
-  try {
+  try 
+  {
     const doctorId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!doctorId) {
+    if (!doctorId) 
+      {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    // Only doctors can update records
-    if (req.user?.role !== 'doctor') {
+    if (req.user?.role !== 'doctor') 
+    {
       return res.status(403).json({
         success: false,
         message: 'Only doctors can update records'
@@ -243,19 +256,21 @@ const updateRecord = async (req, res) => {
 
     const record = await PatientRecord.findById(recordId);
 
-    if (!record) {
+    if (!record) 
+    {
       return res.status(404).json({
         success: false,
         message: 'Record not found'
       });
     }
 
-    // Update fields
     const updateData = {};
-    if (prescription !== undefined) {
+    if (prescription !== undefined) 
+    {
       updateData.prescription = prescription.trim();
     }
-    if (diagnosis !== undefined) {
+    if (diagnosis !== undefined) 
+    {
       updateData.diagnosis = diagnosis.trim();
     }
     updateData.lastUpdatedBy = doctorId;
@@ -275,7 +290,9 @@ const updateRecord = async (req, res) => {
       message: 'Record updated successfully',
       record: updatedRecord
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Update record error:', error);
     res.status(500).json({
       success: false,
@@ -285,7 +302,6 @@ const updateRecord = async (req, res) => {
   }
 };
 
-// GET /api/records/:recordId/file - Download/view file
 const getRecordFile = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?.userId || req.user?._id;
@@ -301,14 +317,14 @@ const getRecordFile = async (req, res) => {
 
     const record = await PatientRecord.findById(recordId);
 
-    if (!record) {
+    if (!record)
+    {
       return res.status(404).json({
         success: false,
         message: 'Record not found'
       });
     }
 
-    // Check if user has access (patient owns it, or doctor accessing patient's record)
     if (req.user?.role === 'patient') {
       if (record.patientId.toString() !== userId) {
         return res.status(403).json({
@@ -316,17 +332,20 @@ const getRecordFile = async (req, res) => {
           message: 'Access denied'
         });
       }
-    } else if (req.user?.role === 'doctor') {
-      // Doctors can access any patient's records
-      // (In production, you might want to add additional checks)
-    } else {
+    } 
+    else if (req.user?.role === 'doctor') 
+    {
+    } 
+    else 
+    {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
       });
     }
 
-    if (!fs.existsSync(record.filePath)) {
+    if (!fs.existsSync(record.filePath)) 
+    {
       return res.status(404).json({
         success: false,
         message: 'File not found'
@@ -336,7 +355,9 @@ const getRecordFile = async (req, res) => {
     res.setHeader('Content-Disposition', `inline; filename="${record.fileName}"`);
     res.setHeader('Content-Type', record.fileType);
     res.sendFile(path.resolve(record.filePath));
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get record file error:', error);
     res.status(500).json({
       success: false,
@@ -346,20 +367,21 @@ const getRecordFile = async (req, res) => {
   }
 };
 
-// DELETE /api/records/:recordId - Delete a record (patient only)
 const deleteRecord = async (req, res) => {
-  try {
+  try 
+  {
     const userId = req.user?.id || req.user?.userId || req.user?._id;
     
-    if (!userId) {
+    if (!userId) 
+    {
       return res.status(401).json({
         success: false,
         message: 'User ID not found in token'
       });
     }
 
-    // Only patients can delete their own records
-    if (req.user?.role !== 'patient') {
+    if (req.user?.role !== 'patient') 
+    {
       return res.status(403).json({
         success: false,
         message: 'Only patients can delete their own records'
@@ -370,23 +392,24 @@ const deleteRecord = async (req, res) => {
 
     const record = await PatientRecord.findById(recordId);
 
-    if (!record) {
+    if (!record) 
+    {
       return res.status(404).json({
         success: false,
         message: 'Record not found'
       });
     }
 
-    // Check ownership
-    if (record.patientId.toString() !== userId) {
+    if (record.patientId.toString() !== userId) 
+    {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
       });
     }
 
-    // Delete file
-    if (fs.existsSync(record.filePath)) {
+    if (fs.existsSync(record.filePath)) 
+    {
       fs.unlinkSync(record.filePath);
     }
 

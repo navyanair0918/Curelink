@@ -1,58 +1,68 @@
-.doctor-dashboard {
+.doctor-dashboard 
+{
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.doctor-dashboard-header {
+.doctor-dashboard-header 
+{
   margin-bottom: 2rem;
 }
 
-.doctor-dashboard-header h1 {
+.doctor-dashboard-header h1 
+{
   font-size: 2rem;
   color: #1a202c;
   margin-bottom: 0.5rem;
 }
 
-.doctor-dashboard-header p {
+.doctor-dashboard-header p 
+{
   color: #718096;
   font-size: 1.1rem;
 }
 
-.doctor-dashboard-loading {
+.doctor-dashboard-loading 
+{
   text-align: center;
   padding: 3rem;
   font-size: 1.2rem;
   color: #718096;
 }
 
-.doctor-message {
+.doctor-message 
+{
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
   font-weight: 500;
 }
 
-.doctor-message.success {
+.doctor-message.success 
+{
   background: #d1fae5;
   color: #065f46;
   border: 1px solid #10b981;
 }
 
-.doctor-message.error {
+.doctor-message.error 
+{
   background: #fee2e2;
   color: #991b1b;
   border: 1px solid #ef4444;
 }
 
-.status-filters {
+.status-filters 
+{
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
-.status-filters button {
+.status-filters button 
+{
   padding: 0.75rem 1.5rem;
   border: 2px solid #e2e8f0;
   background: white;
@@ -63,18 +73,21 @@
   transition: all 0.3s ease;
 }
 
-.status-filters button:hover {
+.status-filters button:hover 
+{
   border-color: #667eea;
   color: #667eea;
 }
 
-.status-filters button.active {
+.status-filters button.active 
+{
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-color: transparent;
 }
 
-.no-appointments {
+.no-appointments 
+{
   text-align: center;
   padding: 3rem;
   color: #718096;
@@ -84,13 +97,15 @@
   border: 2px dashed #e2e8f0;
 }
 
-.appointments-grid {
+.appointments-grid 
+{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
 }
 
-.doctor-appointment-card {
+.doctor-appointment-card 
+{
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
@@ -99,12 +114,14 @@
   transition: all 0.3s ease;
 }
 
-.doctor-appointment-card:hover {
+.doctor-appointment-card:hover 
+{
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
-.appointment-header {
+.appointment-header 
+{
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -113,19 +130,22 @@
   border-bottom: 2px solid #e2e8f0;
 }
 
-.appointment-header h3 {
+.appointment-header h3 
+{
   font-size: 1.25rem;
   color: #2d3748;
   margin: 0 0 0.25rem 0;
 }
 
-.patient-email {
+.patient-email 
+{
   color: #718096;
   font-size: 0.875rem;
   margin: 0;
 }
 
-.status-badge {
+.status-badge 
+{
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
@@ -133,11 +153,13 @@
   color: white;
 }
 
-.appointment-details {
+.appointment-details 
+{
   margin-bottom: 1rem;
 }
 
-.detail-item {
+.detail-item 
+{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,28 +167,33 @@
   border-bottom: 1px solid #f7fafc;
 }
 
-.detail-item:last-child {
+.detail-item:last-child 
+{
   border-bottom: none;
 }
 
-.detail-item strong {
+.detail-item strong 
+{
   color: #4a5568;
   font-weight: 600;
 }
 
-.detail-item span {
+.detail-item span 
+{
   color: #2d3748;
   text-align: right;
 }
 
-.appointment-actions {
+.appointment-actions 
+{
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 2px solid #e2e8f0;
 }
 
 .btn-confirm,
-.btn-complete {
+.btn-complete 
+{
   width: 100%;
   padding: 0.75rem;
   border: none;
@@ -176,48 +203,58 @@
   transition: all 0.3s ease;
 }
 
-.btn-confirm {
+.btn-confirm 
+{
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
 
-.btn-confirm:hover:not(:disabled) {
+.btn-confirm:hover:not(:disabled) 
+{
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
-.btn-complete {
+.btn-complete 
+{
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
-.btn-complete:hover:not(:disabled) {
+.btn-complete:hover:not(:disabled) 
+{
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-confirm:disabled,
-.btn-complete:disabled {
+.btn-complete:disabled 
+{
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .doctor-dashboard {
+@media (max-width: 768px) 
+{
+  .doctor-dashboard 
+  {
     padding: 1rem;
   }
 
-  .appointments-grid {
+  .appointments-grid 
+  {
     grid-template-columns: 1fr;
   }
 
-  .status-filters {
+  .status-filters 
+  {
     flex-direction: column;
   }
 
-  .status-filters button {
+  .status-filters button 
+  {
     width: 100%;
   }
 }

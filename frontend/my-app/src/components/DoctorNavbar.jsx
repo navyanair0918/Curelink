@@ -14,7 +14,7 @@ const DoctorNavbar = ({ onLogout }) => {
     <nav className="doctor-navbar">
       <div className="navbar-brand">
         <Link to="/dashboard" className="brand-link">
-          <span className="brand-icon">⚕️</span>
+
           <h1>CureLink</h1>
         </Link>
       </div>
@@ -24,21 +24,19 @@ const DoctorNavbar = ({ onLogout }) => {
           to="/dashboard" 
           className={`nav-link ${isActive('/dashboard') ? 'active' : ''}`}
         >
-          <span className="nav-icon">📊</span>
+
           Dashboard
         </Link>
         <Link 
           to="/appointments"
           className={`nav-link ${isActive('/appointments') ? 'active' : ''}`}
         >
-          <span className="nav-icon">📋</span>
           My Appointments
         </Link>
       </div>
 
       <div className="navbar-actions">
         <button onClick={onLogout} className="btn-logout">
-          <span className="logout-icon">🚪</span>
           Logout
         </button>
       </div>

@@ -1,6 +1,6 @@
 # Admin User Setup Guide
 
-## 🚀 Create Admin User
+## Create Admin User
 
 To create the admin user with the credentials:
 - **Email:** navyanair@gmail.com
@@ -33,7 +33,7 @@ use curelink
 
 ---
 
-## ✅ What the Script Does
+## What the Script Does
 
 1. Connects to MongoDB
 2. Checks if admin already exists
@@ -43,7 +43,7 @@ use curelink
 
 ---
 
-## 🔐 Admin Login
+## Admin Login
 
 1. Go to the login page
 2. Select **"Admin"** from the role toggle
@@ -55,7 +55,7 @@ use curelink
 
 ---
 
-## 📊 Admin Dashboard Features
+## Admin Dashboard Features
 
 Once logged in as admin, you can:
 
@@ -67,7 +67,7 @@ Once logged in as admin, you can:
 
 ---
 
-## 🛡️ Security
+## Security
 
 - Admin routes are protected - only users with `role: "admin"` can access
 - Admin cannot be registered through the normal registration form

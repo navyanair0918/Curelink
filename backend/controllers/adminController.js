@@ -1,13 +1,11 @@
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 
-// GET /api/admin/users - Get all users (doctors and patients)
 const getAllUsers = async (req, res) => {
-  try {
-    // Get all users excluding password
+  try 
+  {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     
-    // Separate by role
     const patients = users.filter(user => user.role === 'patient');
     const doctors = users.filter(user => user.role === 'doctor');
     const admins = users.filter(user => user.role === 'admin');
@@ -29,7 +27,9 @@ const getAllUsers = async (req, res) => {
       },
       allUsers: users
     });
-  } catch (error) {
+  }
+  catch (error) 
+  {
     console.error('Get all users error:', error);
     res.status(500).json({
       success: false,
@@ -39,9 +39,9 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// GET /api/admin/patients - Get all patients
 const getAllPatients = async (req, res) => {
-  try {
+  try 
+  {
     const patients = await User.find({ role: 'patient' })
       .select('-password')
       .sort({ createdAt: -1 });
@@ -51,7 +51,9 @@ const getAllPatients = async (req, res) => {
       count: patients.length,
       patients
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get all patients error:', error);
     res.status(500).json({
       success: false,
@@ -61,9 +63,9 @@ const getAllPatients = async (req, res) => {
   }
 };
 
-// GET /api/admin/doctors - Get all doctors
 const getAllDoctors = async (req, res) => {
-  try {
+  try 
+  {
     const doctors = await User.find({ role: 'doctor' })
       .select('-password')
       .sort({ createdAt: -1 });
@@ -73,7 +75,9 @@ const getAllDoctors = async (req, res) => {
       count: doctors.length,
       doctors
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get all doctors error:', error);
     res.status(500).json({
       success: false,
@@ -83,9 +87,9 @@ const getAllDoctors = async (req, res) => {
   }
 };
 
-// GET /api/admin/appointments - Get all appointments
 const getAllAppointments = async (req, res) => {
-  try {
+  try 
+  {
     const appointments = await Appointment.find()
       .populate('patientId', 'name email')
       .populate('doctorId', 'name email')
@@ -96,7 +100,9 @@ const getAllAppointments = async (req, res) => {
       count: appointments.length,
       appointments
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get all appointments error:', error);
     res.status(500).json({
       success: false,
@@ -106,9 +112,9 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
-// GET /api/admin/stats - Get dashboard statistics
 const getDashboardStats = async (req, res) => {
-  try {
+  try 
+  {
     const totalUsers = await User.countDocuments();
     const totalPatients = await User.countDocuments({ role: 'patient' });
     const totalDoctors = await User.countDocuments({ role: 'doctor' });
@@ -135,7 +141,9 @@ const getDashboardStats = async (req, res) => {
         }
       }
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error('Get dashboard stats error:', error);
     res.status(500).json({
       success: false,
