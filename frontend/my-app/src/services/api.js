@@ -1,7 +1,11 @@
 import axios from "axios";
 
+// Use environment variable or default to backend URL
+const baseURL = import.meta.env.VITE_API_URL || "https://curelink-1ukh.onrender.com/api";
+
 const API = axios.create({
-  baseURL: "https://curelink-1ukh.onrender.com/api"
+  baseURL: baseURL,
+  withCredentials: true
 });
 
 // Add token to requests if available
@@ -14,6 +18,19 @@ API.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor for better error handling
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("isLoggedIn");
+    }
     return Promise.reject(error);
   }
 );

@@ -72,7 +72,19 @@ function Login({ onSuccess }) {
     catch (error) 
     {
       setLoading(false);
-      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      let errorMessage = "Login failed. Please try again.";
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message === 'Network Error') {
+        errorMessage = "Network error. Check your connection and backend URL.";
+      } else if (error.code === 'ECONNABORTED') {
+        errorMessage = "Request timeout. Backend server may be unavailable.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      console.error("Login error details:", error);
       setMessage(errorMessage);
       setType("error");
     }
