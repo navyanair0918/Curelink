@@ -82,7 +82,8 @@ const uploadRecord = async (req, res) => {
       title: title.trim(),
       description: description ? description.trim() : '',
       fileName: req.file.originalname,
-      filePath: req.file.path,
+      filePath: null,
+      fileData: fs.readFileSync(req.file.path),
       fileSize: req.file.size,
       fileType: req.file.mimetype,
       createdBy: req.user?.role === 'doctor' ? 'doctor' : 'patient'
@@ -98,6 +99,12 @@ const uploadRecord = async (req, res) => {
 
     const record = new PatientRecord(recordData);
     await record.save();
+
+    // Clean up temporary file after saving to database
+    if (req.file && fs.existsSync(req.file.path)) 
+    {
+      fs.unlinkSync(req.file.path);
+    }
 
     const populatedRecord = await PatientRecord.findById(record._id)
       .populate('doctorId', 'name email specialization')
@@ -344,7 +351,7 @@ const getRecordFile = async (req, res) => {
       });
     }
 
-    if (!fs.existsSync(record.filePath)) 
+    if (!record.fileData)
     {
       return res.status(404).json({
         success: false,
@@ -354,7 +361,7 @@ const getRecordFile = async (req, res) => {
 
     res.setHeader('Content-Disposition', `inline; filename="${record.fileName}"`);
     res.setHeader('Content-Type', record.fileType);
-    res.sendFile(path.resolve(record.filePath));
+    res.send(record.fileData);
   } 
   catch (error) 
   {
@@ -406,11 +413,6 @@ const deleteRecord = async (req, res) => {
         success: false,
         message: 'Access denied'
       });
-    }
-
-    if (fs.existsSync(record.filePath)) 
-    {
-      fs.unlinkSync(record.filePath);
     }
 
     await PatientRecord.findByIdAndDelete(recordId);

@@ -33,7 +33,11 @@ const patientRecordSchema = new mongoose.Schema({
   },
   filePath: {
     type: String,
-    required: true
+    default: null
+  },
+  fileData: {
+    type: Buffer,
+    default: null
   },
   fileSize: {
     type: Number,

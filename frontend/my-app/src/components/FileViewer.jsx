@@ -14,7 +14,8 @@ const FileViewer = ({ recordId, fileName, fileType, onClose }) => {
         setError('');
         
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/records/${recordId}/file`, {
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://curelink-1ukh.onrender.com/api';
+        const response = await fetch(`${apiUrl}/records/${recordId}/file`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
