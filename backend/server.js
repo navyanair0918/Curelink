@@ -6,13 +6,12 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-// Enhanced CORS configuration for production
+
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       process.env.FRONTEND_URL,
-      process.env.FRONTEND_URL?.replace(/\/$/, ''), // Remove trailing slash
+      process.env.FRONTEND_URL?.replace(/\/$/, ''), 
       'http://localhost:3000',
       'http://localhost:5173'
     ].filter(Boolean);
@@ -31,20 +30,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Detailed logging for debugging
 console.log('=== Server Starting ===');
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('PORT:', process.env.PORT || 5000);
 console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
 console.log('MONGODB_URI set:', !!process.env.MONGODB_URI);
 
-// Request logging middleware (to see all API requests in console)
 app.use((req, res, next) => {
   console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.path}`);
   next();
 });
 
-// MongoDB Connection with detailed error logging
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/curelink';
 console.log('Connecting to MongoDB...');
 mongoose.connect(mongoUri, {
@@ -52,17 +48,15 @@ mongoose.connect(mongoUri, {
   useUnifiedTopology: true
 })
 .then(() => {
-  console.log('✓ MongoDB Connected Successfully');
+  console.log('MongoDB Connected Successfully');
 })
 .catch(err => {
-  console.error('✗ MongoDB Connection Error:', err.message);
+  console.error('MongoDB Connection Error:', err.message);
   console.error('Full error:', err);
 });
 
-// Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
@@ -70,12 +64,10 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/records', require('./routes/patientRecordRoutes'));
 app.use('/api/availability', require('./routes/availabilityRoutes'));
 
-// Basic route
 app.get('/', (req, res) => {
   res.json({ message: 'CureLink API - Appointment Module' });
 });
 
-// Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
