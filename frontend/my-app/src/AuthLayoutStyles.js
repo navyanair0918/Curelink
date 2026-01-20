@@ -30,6 +30,9 @@ const authLayoutStyles = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    maxHeight: "85vh",
+    overflowY: "auto",
+    overflowX: "hidden",
   },
 
   right: {
